@@ -1,8 +1,9 @@
 ------------------------------------------------------------------------------
--- GridStatusTankCooldown by Slaren
+-- GridStatusExternals
+-- Old Tank Status Cool Downs by Slaren Rezed By Doadin
 ------------------------------------------------------------------------------
-GridStatusTankCooldown = Grid:GetModule("GridStatus"):NewModule("GridStatusTankCooldown")
-GridStatusTankCooldown.menuName = "Tanking cooldowns"
+GridStatusExternals = Grid:GetModule("GridStatus"):NewModule("GridStatusExternals")
+GridStatusExternals.menuName = "Tanking cooldowns"
 
 local tankingbuffs = {
 	["DEATHKNIGHT"] = {
@@ -93,7 +94,7 @@ local tankingbuffs = {
 	}
 }
 
-GridStatusTankCooldown.tankingbuffs = tankingbuffs
+GridStatusExternals.tankingbuffs = tankingbuffs
 
 -- locals
 local GridRoster = Grid:GetModule("GridRoster")
@@ -105,9 +106,9 @@ local UnitGUID = UnitGUID
 local settings
 local spellnames = {}
 
-GridStatusTankCooldown.defaultDB = {
+GridStatusExternals.defaultDB = {
 	debug = false,
-	alert_tankcd = {
+	alert_externals = {
 		enable = true,
 		color = { r = 1, g = 1, b = 0, a = 1 },
 		priority = 99,
@@ -130,7 +131,7 @@ GridStatusTankCooldown.defaultDB = {
 }
 
 local myoptions = {
-	["gstcd_header_1"] = {
+	["GSE_header_1"] = {
 		type = "header",
 		order = 200,
 		name = "Options",
@@ -142,10 +143,10 @@ local myoptions = {
 		desc = "Text to show when assigned to an indicator capable of displaying text",
 		values = { ["caster"] = "Caster name", ["spell"] = "Spell name" },
 		style = "radio",
-		get = function() return GridStatusTankCooldown.db.profile.alert_tankcd.showtextas end,
-		set = function(_, v) GridStatusTankCooldown.db.profile.alert_tankcd.showtextas = v end,
+		get = function() return GridStatusExternals.db.profile.alert_externals.showtextas end,
+		set = function(_, v) GridStatusExternals.db.profile.alert_externals.showtextas = v end,
 	},
-	["gstcd_header_2"] = {
+	["GSE_header_2"] = {
 		type = "header",
 		order = 203,
 		name = "Spells",
@@ -153,17 +154,17 @@ local myoptions = {
 	["spells_description"] = {
 		type = "description",
 		order = 204,
-		name = "Check the spells that you want GridStatusTankCooldown to keep track of. Their position on the list defines their priority in the case that a unit has more than one of them.",
+		name = "Check the spells that you want GridStatusExternals to keep track of. Their position on the list defines their priority in the case that a unit has more than one of them.",
 	},
 	["spells"] = {
 		type = "input",
 		order = 205,
 		name = "Spells",
-		control = "GSTCD-SpellsConfig",
+		control = "GSE-SpellsConfig",
 	},
 }
 
-function GridStatusTankCooldown:OnInitialize()
+function GridStatusExternals:OnInitialize()
 	self.super.OnInitialize(self)
 	
 	for class, buffs in pairs(tankingbuffs) do
@@ -174,9 +175,9 @@ function GridStatusTankCooldown:OnInitialize()
 		end
 	end
 	
-	self:RegisterStatus("alert_tankcd", "Tanking cooldowns", myoptions, true)
+	self:RegisterStatus("alert_externals", "Tanking cooldowns", myoptions, true)
 
-	settings = self.db.profile.alert_tankcd
+	settings = self.db.profile.alert_externals
 
 	-- delete old format settings
 	if settings.spellids then
@@ -208,36 +209,36 @@ function GridStatusTankCooldown:OnInitialize()
 	end
 end
 
-function GridStatusTankCooldown:OnStatusEnable(status)
-	if status == "alert_tankcd" then
+function GridStatusExternals:OnStatusEnable(status)
+	if status == "alert_externals" then
 		self:RegisterEvent("UNIT_AURA", "ScanUnit")
 		self:RegisterEvent("Grid_UnitJoined")
-		-- self:ScheduleRepeatingEvent("GridStatusTankCooldown:UpdateAllUnits", self.UpdateAllUnits, 0.5, self)
+		-- self:ScheduleRepeatingEvent("GridStatusExternals:UpdateAllUnits", self.UpdateAllUnits, 0.5, self)
 		self:UpdateAllUnits()
 	end
 end
 
-function GridStatusTankCooldown:OnStatusDisable(status)
-	if status == "alert_tankcd" then
+function GridStatusExternals:OnStatusDisable(status)
+	if status == "alert_externals" then
 		self:UnregisterEvent("UNIT_AURA")
 		self:UnregisterEvent("Grid_UnitJoined")
 
-		--self:CancelScheduledEvent("GridStatusTankCooldown:UpdateAllUnits")
-		self.core:SendStatusLostAllUnits("alert_tankcd")
+		--self:CancelScheduledEvent("GridStatusExternals:UpdateAllUnits")
+		self.core:SendStatusLostAllUnits("alert_externals")
 	end
 end
 
-function GridStatusTankCooldown:Grid_UnitJoined(guid, unitid)
+function GridStatusExternals:Grid_UnitJoined(guid, unitid)
 	self:ScanUnit("Grid_UnitJoined", unitid, guid)
 end
 
-function GridStatusTankCooldown:UpdateAllUnits()
+function GridStatusExternals:UpdateAllUnits()
 	for guid, unitid in GridRoster:IterateRoster() do
 		self:ScanUnit("UpdateAllUnits", unitid, guid)
 	end
 end
 
-function GridStatusTankCooldown:ScanUnit(event, unitid, unitguid)
+function GridStatusExternals:ScanUnit(event, unitid, unitguid)
 	unitguid = unitguid or UnitGUID(unitid)
 	if not GridRoster:IsGUIDInRaid(unitguid) then
 		return
@@ -264,7 +265,7 @@ function GridStatusTankCooldown:ScanUnit(event, unitid, unitguid)
 			end
 
 			self.core:SendStatusGained(unitguid, 
-						"alert_tankcd",
+						"alert_externals",
 						settings.priority,
 						(settings.range and 40),
 						settings.color,
@@ -279,5 +280,5 @@ function GridStatusTankCooldown:ScanUnit(event, unitid, unitguid)
 		end
 	end
 
-	self.core:SendStatusLost(unitguid, "alert_tankcd")
+	self.core:SendStatusLost(unitguid, "alert_externals")
 end

@@ -1,7 +1,7 @@
 local AceGUI = LibStub("AceGUI-3.0")
 
 do
-	local widgetType = "GSTCD-SpellsConfig"
+	local widgetType = "GSE-SpellsConfig"
 	local widgetVersion = 1
 	local SPELL_HEIGHT = 24
 
@@ -86,7 +86,7 @@ do
 		end
 		
 		UpdateSpells(self)
-		GridStatusTankCooldown:UpdateAllUnits()
+		GridStatusExternals:UpdateAllUnits()
 	end
 	
 	local function UpButton_Click(frame)
@@ -105,7 +105,7 @@ do
 			end
 
 			UpdateSpells(self)
-			GridStatusTankCooldown:UpdateAllUnits()
+			GridStatusExternals:UpdateAllUnits()
 		end
 	end
 
@@ -125,7 +125,7 @@ do
 			end
 
 			UpdateSpells(self)
-			GridStatusTankCooldown:UpdateAllUnits()
+			GridStatusExternals:UpdateAllUnits()
 		end
 	end
 
@@ -175,7 +175,7 @@ do
 		}
 	
 		-- Create spell containers
-		local spells = GridStatusTankCooldown.tankingbuffs
+		local spells = GridStatusExternals.tankingbuffs
 		
 		local spell_count = 0
 		for _, cspells in pairs(spells) do
@@ -268,8 +268,8 @@ do
 		widget.frame = frame
 		widget.spell_containers = spell_containers
 		widget.spells = spells
-		widget.active_spellids = GridStatusTankCooldown.db.profile.alert_tankcd.active_spellids
-		widget.inactive_spellids = GridStatusTankCooldown.db.profile.alert_tankcd.inactive_spellids
+		widget.active_spellids = GridStatusExternals.db.profile.alert_externals.active_spellids
+		widget.inactive_spellids = GridStatusExternals.db.profile.alert_externals.inactive_spellids
 		
 		AceGUI:RegisterAsWidget(widget)
 		

@@ -1,0 +1,13 @@
+## Interface: 70100
+## Title: GridStatusExternals
+## Notes: Adds a status to Grid for tanking survival cooldowns
+## Author: Doadin
+## Version: r54
+## Dependencies: Grid
+## X-Curse-Packaged-Version: r54
+## X-Curse-Project-Name: GridStatusExternals
+## X-Curse-Project-ID: GridStatusExternals
+## X-Curse-Repository-ID: wow/GridStatusExternals/mainline
+
+SpellsWidget.lua
+GridStatusExternals.lua
