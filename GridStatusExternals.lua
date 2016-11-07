@@ -92,6 +92,7 @@ local tankingbuffs = {
 	},
 	["WARRIOR"] = {
 		118038, -- Die by the Sword
+		190456, -- Ignore Pain
 		12975,  -- Last Stand
 		97463,  -- Commanding Shout
 		122973, -- Safeguard	
