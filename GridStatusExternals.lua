@@ -11,22 +11,29 @@ local tankingbuffs = {
 		50461, -- Anti-Magic Zone
 		42650, -- Army of the Dead
 		77535, -- Blood Shield		
-		49222, -- Bone Shield
+		195181, -- Bone Shield
 		49028, -- Dancing Rune Weapon
 		48792, -- Icebound Fortitude
 		55233, -- Vampiric Blood
-		105588, -- Vampiric Brood (tier bonus)
+	},
+	["DEMONHUNTER"] = {
+		198589, -- Blur
+		209426,  -- Darkness
+		203720,  -- Demon Spikes
+		204021,  -- Fiery Brand
+		187827,  -- Metamorphosis
+		207810,  -- Nether Bond
 	},
 	["DRUID"] = {
 		22812,  -- Barkskin
 		102342, -- Ironbark
 		105737, -- Mass Regeneration (tier bonus)
-		132402, -- Savage Defense
 		61336,  -- Survival Instincts
+        740,    -- Tranquility
 	},
 	["HUNTER"] = {
+		186265,  -- Aspect of the Turtle
 		19263,  -- Deterrence
-		63087,  -- Glyph of Raptor Strike
 	},
 	["MAGE"] = {
 		157913, -- Evanesce
@@ -39,27 +46,30 @@ local tankingbuffs = {
 		122783, -- Diffuse Magic
 		115308, -- Elusive Brew
 		115203, -- Fortifying Brew
-		115295, -- Guard
 		116849, -- Life Cocoon
 		115176, -- Zen Meditation
 	},
 	["PALADIN"] = {
+        204150,  -- Aegis of Light
 		31850,  -- Ardent Defender
+		1044,  -- Blessing of Freedom
+		1022,   -- Blessing of Protection
+		6940,   -- Blessing of Sacrifice
+		204018,  -- Blessing of Spellwarding
 		31821,  -- Devotion Aura
 		498,    -- Divine Protection
 		642,    -- Divine Shield
 		86659,  -- Guardian of Ancient Kings
-		1022,   -- Hand of Protection
-		114039, -- Hand of Purity
-		6940,   -- Hand of Sacrifice
-		20925,  -- Holy Shield
+		152261, -- Holy Shield
 		132403, -- Shield of the Righteous
 	},
 	["PRIEST"] = {
 		47585,  -- Dispersion
+		64843,  -- Divine Hymn
 		47788,  -- Guardian Spirit
 		33206,  -- Pain Suppression
 		81782,  -- Power Word: Barrier
+		15286,  -- Vampiric Embrace
 	},
 	["ROGUE"] = {
 		31224,  -- Cloak of Shadows
@@ -68,28 +78,25 @@ local tankingbuffs = {
 		76577,  -- Smoke Bomb
 	},
 	["SHAMAN"] = {
+		207399, -- Ancestral Protection Totem
 		108271, -- Astral Shift
-		30823,  -- Shamanistic Rage
 		98008,  -- Spirit Link Totem
 		114893, -- Stone Bulwark Totem
 	},
-	["WARLOCK"] = {
-		110913, -- Dark Bargain        
+	["WARLOCK"] = {    
 		108359, -- Dark Regeneration
-		-- 91711,  -- Nether Ward
-		108416, -- Sacrificial Pact
-		-- 6229,   -- Shadow Ward
+		212295, -- Nether Ward
+		108416, -- Dark Pact
 		104773, -- Unending Resolve
 	},
 	["WARRIOR"] = {
 		118038, -- Die by the Sword
 		12975,  -- Last Stand
-		97463,  -- Rallying Cry
-		46947,  -- Safeguard
-		112048, -- Shield Barrier		
+		97463,  -- Commanding Shout
+		122973, -- Safeguard	
 		2565,   -- Shield Block
-		105914, -- Shield Fortress (tier bonus)
 		871,    -- Shield Wall
+		23920,  -- Spell Reflection
 		114030, -- Vigilance
 	}
 }
