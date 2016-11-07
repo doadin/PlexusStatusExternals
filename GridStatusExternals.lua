@@ -63,6 +63,7 @@ local tankingbuffs = {
 		86659,  -- Guardian of Ancient Kings
 		152261, -- Holy Shield
 		132403, -- Shield of the Righteous
+		184662, -- Shield of Vengeance
 	},
 	["PRIEST"] = {
 		47585,  -- Dispersion
