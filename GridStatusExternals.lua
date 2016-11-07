@@ -25,6 +25,7 @@ local tankingbuffs = {
 	["DRUID"] = {
 		22812,  -- Barkskin
 		102342, -- Ironbark
+		192081, -- Ironfur
 		105737, -- Mass Regeneration (tier bonus)
 		61336,  -- Survival Instincts
         740,    -- Tranquility
