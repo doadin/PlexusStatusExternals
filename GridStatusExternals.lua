@@ -9,7 +9,6 @@ local tankingbuffs = {
 	["DEATHKNIGHT"] = {
 		48707, -- Anti-Magic Shell
 		50461, -- Anti-Magic Zone
-		42650, -- Army of the Dead
 		77535, -- Blood Shield		
 		195181, -- Bone Shield
 		49028, -- Dancing Rune Weapon
@@ -20,7 +19,6 @@ local tankingbuffs = {
 		198589, -- Blur
 		209426,  -- Darkness
 		203720,  -- Demon Spikes
-		204021,  -- Fiery Brand
 		187827,  -- Metamorphosis
 		207810,  -- Nether Bond
 	},
