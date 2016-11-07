@@ -52,11 +52,13 @@ local tankingbuffs = {
 	["PALADIN"] = {
         204150,  -- Aegis of Light
 		31850,  -- Ardent Defender
+		183415,  -- Aura of Mercy
+		183416,  -- Aura of Sacrifice
 		1044,  -- Blessing of Freedom
 		1022,   -- Blessing of Protection
 		6940,   -- Blessing of Sacrifice
 		204018,  -- Blessing of Spellwarding
-		31821,  -- Devotion Aura
+		210320,  -- Devotion Aura
 		498,    -- Divine Protection
 		642,    -- Divine Shield
 		86659,  -- Guardian of Ancient Kings
@@ -182,7 +184,7 @@ function GridStatusExternals:OnInitialize()
 		end
 	end
 	
-	self:RegisterStatus("alert_externals", "Tanking cooldowns", myoptions, true)
+	self:RegisterStatus("alert_externals", "External cooldowns", myoptions, true)
 
 	settings = self.db.profile.alert_externals
 
