@@ -1,0 +1,18 @@
+Tagging as v0.1
+
+--------------------
+
+Doadin:
+    - Update Paladin
+    - Update Warrior
+    - Update Druid
+    - Update DK and DH
+    - Update Paladin
+    - Update TOC
+    - Initial Update For 7.1
+        *Remove spells that no longer exist
+        *Update spell ids
+        *Add demon hunter
+        *Add new spells
+    - Complete Rename
+    - Init From GridStatusTankCooldown
