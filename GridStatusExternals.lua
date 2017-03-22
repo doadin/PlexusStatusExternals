@@ -26,9 +26,9 @@ local tankingbuffs = {
 		22812,  -- Barkskin
 		102342, -- Ironbark
 		192081, -- Ironfur
-		105737, -- Mass Regeneration (tier bonus)
+		105737, -- Might of Ursoc (Mass Regeneration tier bonus) 
 		61336,  -- Survival Instincts
-        740,    -- Tranquility
+        740,    -- Tranquility 
 	},
 	["HUNTER"] = {
 		186265,  -- Aspect of the Turtle
@@ -46,6 +46,9 @@ local tankingbuffs = {
 		115308, -- Elusive Brew
 		115203, -- Fortifying Brew
 		116849, -- Life Cocoon
+        124275, -- Light Stagger
+        124274, -- Moderate Stagger
+        124273, -- Heavy Stagger
 		115176, -- Zen Meditation
 	},
 	["PALADIN"] = {
@@ -61,7 +64,6 @@ local tankingbuffs = {
 		498,    -- Divine Protection
 		642,    -- Divine Shield
 		86659,  -- Guardian of Ancient Kings
-		152261, -- Holy Shield
 		132403, -- Shield of the Righteous
 		184662, -- Shield of Vengeance
 	},
