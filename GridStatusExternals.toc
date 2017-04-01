@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 70200
 ## Title: GridStatusExternals
 ## Notes: Adds a status to Grid for Raid/Personal CDs.
 ## Author: Doadin(Original GSTC by slaren)
