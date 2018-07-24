@@ -1,2 +1,4 @@
 package-as: GridStatusExternals
-manual-changelog: CHANGELOG.txt
+#manual-changelog: CHANGELOG.txt
+ignore:
+ - .pkgmeta
