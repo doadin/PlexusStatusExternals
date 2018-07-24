@@ -224,7 +224,7 @@ end
 function GridStatusExternals:OnStatusEnable(status)
 	if status == "alert_externals" then
 		self:RegisterEvent("UNIT_AURA", "ScanUnit")
-		self:RegisterEvent("Grid_UnitJoined")
+		self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
 		-- self:ScheduleRepeatingEvent("GridStatusExternals:UpdateAllUnits", self.UpdateAllUnits, 0.5, self)
 		self:UpdateAllUnits()
 	end
@@ -233,7 +233,7 @@ end
 function GridStatusExternals:OnStatusDisable(status)
 	if status == "alert_externals" then
 		self:UnregisterEvent("UNIT_AURA")
-		self:UnregisterEvent("Grid_UnitJoined")
+		self:UnregisterEvent("GROUP_ROSTER_UPDATE")
 
 		--self:CancelScheduledEvent("GridStatusExternals:UpdateAllUnits")
 		self.core:SendStatusLostAllUnits("alert_externals")
@@ -256,41 +256,37 @@ function GridStatusExternals:ScanUnit(event, unitid, unitguid)
 		return
 	end
 
-	for _, spellid in ipairs(settings.active_spellids) do
-		local name, _, icon, count, _, duration, expirationTime, caster = UnitBuff(unitid, spellnames[spellid])
-		
-		-- Used to check for debuffs when Argent Defender was a debuff - it is not necessary anymore
-		--[[
-		if not name then
-			name, _, icon, count, _, duration, expirationTime, caster = UnitDebuff(unitid, spellnames[spellid])
-		end
-		]]
-
-		if name then
-			local text 
-			if settings.showtextas == "caster" then
-				if caster then
-					text = UnitName(caster)
-				end
-			else
-				text = name
-			end
-
-			self.core:SendStatusGained(unitguid, 
-						"alert_externals",
-						settings.priority,
-						(settings.range and 40),
-						settings.color,
-						text,
-						0,							-- value
-						nil,						-- maxValue
-						icon,						-- icon
-						expirationTime - duration,	-- start
-						duration,					-- duration
-						count)						-- stack
-			return
-		end
-	end
+    for _, spellid in ipairs(settings.active_spellids) do
+        for i =1, 40 do
+	        local name, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId = UnitBuff(unitid, i)
+            if spellid == spellId then
+	            if name then
+	            	local text 
+	            	if settings.showtextas == "caster" then
+	            		if caster then
+	            			text = UnitName(caster)
+	            		end
+	            	else
+	            		text = name
+	            	end
+                   
+	            	self.core:SendStatusGained(unitguid, 
+	            				"alert_externals",
+	            				settings.priority,
+	            				(settings.range and 40),
+	            				settings.color,
+	            				text,
+	            				0,							-- value
+	            				nil,						-- maxValue
+	            				icon,						-- icon
+	            				expirationTime - duration,	-- start
+	            				duration,					-- duration
+	            				count)						-- stack
+	            	return
+	            end
+            end
+        end
+    end
 
 	self.core:SendStatusLost(unitguid, "alert_externals")
 end
