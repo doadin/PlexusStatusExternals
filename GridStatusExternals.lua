@@ -117,6 +117,7 @@ local UnitGUID = UnitGUID
 
 local settings
 local spellnames = {}
+local spellid_list = {}
 
 GridStatusExternals.defaultDB = {
 	debug = false,
@@ -219,6 +220,16 @@ function GridStatusExternals:OnInitialize()
 			end
 		end
 	end
+	self:UpdateAuraScanList()
+end
+
+function GridStatusExternals:UpdateAuraScanList()
+	spellid_list = {}
+
+	for _, spellid in ipairs(settings.active_spellids) do
+		_, _, icon = GetSpellInfo(spellid)
+		spellid_list[spellid] = true
+	end
 end
 
 function GridStatusExternals:OnStatusEnable(status)
@@ -248,45 +259,46 @@ function GridStatusExternals:UpdateAllUnits()
 	for guid, unitid in GridRoster:IterateRoster() do
 		self:ScanUnit("UpdateAllUnits", unitid, guid)
 	end
+	self:UpdateAuraScanList()
 end
 
 function GridStatusExternals:ScanUnit(event, unitid, unitguid)
-	unitguid = unitguid or UnitGUID(unitid)
+	if not unitguid then unitguid = UnitGUID(unitid) end
 	if not GridRoster:IsGUIDInRaid(unitguid) then
 		return
 	end
 
-    for _, spellid in ipairs(settings.active_spellids) do
-        for i =1, 40 do
-	        local name, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId = UnitBuff(unitid, i)
-            if spellid == spellId then
-	            if name then
-	            	local text 
-	            	if settings.showtextas == "caster" then
-	            		if caster then
-	            			text = UnitName(caster)
-	            		end
-	            	else
-	            		text = name
-	            	end
-                   
-	            	self.core:SendStatusGained(unitguid, 
-	            				"alert_externals",
-	            				settings.priority,
-	            				(settings.range and 40),
-	            				settings.color,
-	            				text,
-	            				0,							-- value
-	            				nil,						-- maxValue
-	            				icon,						-- icon
-	            				expirationTime - duration,	-- start
-	            				duration,					-- duration
-	            				count)						-- stack
-	            	return
-	            end
-            end
-        end
-    end
+	for i =1, 40 do
+		local name, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId = UnitBuff(unitid, i)
+		if not name then
+			break
+		end
+
+		if spellid_list[spellId] then
+			local text 
+			if settings.showtextas == "caster" then
+				if caster then
+					text = UnitName(caster)
+				end
+			else
+				text = name
+			end
+		
+			self.core:SendStatusGained(unitguid, 
+						"alert_externals",
+						settings.priority,
+						(settings.range and 40),
+						settings.color,
+						text,
+						0,							-- value
+						nil,						-- maxValue
+						icon,						-- icon
+						expirationTime - duration,	-- start
+						duration,					-- duration
+						count)						-- stack
+			return
+		end
+	end
 
 	self.core:SendStatusLost(unitguid, "alert_externals")
 end
