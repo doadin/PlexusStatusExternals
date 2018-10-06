@@ -44,7 +44,7 @@ local tankingbuffs = {
 		122278, -- Dampen Harm
 		122783, -- Diffuse Magic
 		115308, -- Elusive Brew
-		115203, -- Fortifying Brew
+		243435, -- Fortifying Brew
 		116849, -- Life Cocoon
         124275, -- Light Stagger
         124274, -- Moderate Stagger
@@ -136,7 +136,7 @@ GridStatusExternals.defaultDB = {
 			33206,	-- Pain Suppression
 			871,	-- Shield Wall
 			61336,	-- Survival Instincts
-			115203, -- Fortifying Brew
+			243435, -- Fortifying Brew
 		},
 		inactive_spellids = { -- used to remember priority of disabled spells
 		}
@@ -236,7 +236,6 @@ function GridStatusExternals:OnStatusEnable(status)
 	if status == "alert_externals" then
 		self:RegisterEvent("UNIT_AURA", "ScanUnit")
 		self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
-		-- self:ScheduleRepeatingEvent("GridStatusExternals:UpdateAllUnits", self.UpdateAllUnits, 0.5, self)
 		self:UpdateAllUnits()
 	end
 end
@@ -245,8 +244,6 @@ function GridStatusExternals:OnStatusDisable(status)
 	if status == "alert_externals" then
 		self:UnregisterEvent("UNIT_AURA")
 		self:UnregisterEvent("GROUP_ROSTER_UPDATE")
-
-		--self:CancelScheduledEvent("GridStatusExternals:UpdateAllUnits")
 		self.core:SendStatusLostAllUnits("alert_externals")
 	end
 end
@@ -270,7 +267,7 @@ function GridStatusExternals:ScanUnit(event, unitid, unitguid)
 
 	for i =1, 40 do
 		local name, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId = UnitBuff(unitid, i)
-		if not name then
+		if not spellId then
 			break
 		end
 
@@ -281,7 +278,11 @@ function GridStatusExternals:ScanUnit(event, unitid, unitguid)
 					text = UnitName(caster)
 				end
 			else
-				text = name
+                if not name then
+                    break
+                else
+				    text = name
+                end
 			end
 		
 			self.core:SendStatusGained(unitguid, 
