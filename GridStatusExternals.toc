@@ -3,7 +3,7 @@
 ## Notes: Adds a status to Grid for Raid/Personal CDs.
 ## Author: tptbk(Doadin-Malorne-US),(Original GSTC by slaren)
 ## Dependencies: Grid, GridStatusRaidDebuff
-## Version: 8.0.1.3
+## Version: 8.0.1.5
 ## X-credits: slaren
 
 SpellsWidget.lua
