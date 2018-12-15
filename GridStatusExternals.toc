@@ -1,9 +1,9 @@
-## Interface: 80000
+## Interface: 80100
 ## Title: GridStatusExternals
 ## Notes: Adds a status to Grid for Raid/Personal CDs.
 ## Author: tptbk(Doadin-Malorne-US),(Original GSTC by slaren)
 ## Dependencies: Grid, GridStatusRaidDebuff
-## Version: 8.0.1.5
+## Version: 8.1.0.0
 ## X-credits: slaren
 
 SpellsWidget.lua
