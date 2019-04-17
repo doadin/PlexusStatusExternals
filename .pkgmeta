@@ -1,4 +1,6 @@
 package-as: GridStatusExternals
+required-dependencies:
+    - GridStatusRaidDebuff
 #manual-changelog: CHANGELOG.txt
 ignore:
  - .pkgmeta
