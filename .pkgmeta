@@ -2,3 +2,5 @@ package-as: GridStatusExternals
 #manual-changelog: CHANGELOG.txt
 ignore:
  - .pkgmeta
+ - .gitignore
+ - .gitattributes
