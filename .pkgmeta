@@ -3,3 +3,4 @@ ignore:
  - .pkgmeta
  - .gitignore
  - .gitattributes
+ - .travis.yml
