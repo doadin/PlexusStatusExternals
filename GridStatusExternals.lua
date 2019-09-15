@@ -2,7 +2,13 @@
 -- GridStatusExternals
 -- Old Tank Status Cool Downs by Slaren Rezed By Doadin
 ------------------------------------------------------------------------------
+if (IsAddOnLoaded("Grid")) then
 GridStatusExternals = Grid:GetModule("GridStatus"):NewModule("GridStatusExternals")
+end
+
+if (IsAddOnLoaded("Plexus")) then
+GridStatusExternals = Grid:GetModule("PlexusStatus"):NewModule("GridStatusExternals")
+end
 GridStatusExternals.menuName = "Tanking cooldowns"
 
 local tankingbuffs = {
@@ -109,7 +115,13 @@ local tankingbuffs = {
 GridStatusExternals.tankingbuffs = tankingbuffs
 
 -- locals
+if (IsAddOnLoaded("Grid")) then
 local GridRoster = Grid:GetModule("GridRoster")
+end
+
+if (IsAddOnLoaded("Plexus")) then
+local GridRoster = Grid:GetModule("PlexusRoster")
+end
 local GetSpellInfo = GetSpellInfo
 local UnitBuff = UnitBuff
 local UnitDebuff = UnitDebuff
