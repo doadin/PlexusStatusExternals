@@ -52,21 +52,19 @@ local tankingbuffs = {
 		115308, -- Elusive Brew
 		243435, -- Fortifying Brew
 		116849, -- Life Cocoon
-        124275, -- Light Stagger
-        124274, -- Moderate Stagger
-        124273, -- Heavy Stagger
+                124275, -- Light Stagger
+                124274, -- Moderate Stagger
+                124273, -- Heavy Stagger
 		115176, -- Zen Meditation
 	},
 	["PALADIN"] = {
-        204150,  -- Aegis of Light
 		31850,  -- Ardent Defender
-		183415,  -- Aura of Mercy
-		183416,  -- Aura of Sacrifice
+		295654,  -- Aura of Mercy
 		1044,  -- Blessing of Freedom
 		1022,   -- Blessing of Protection
 		6940,   -- Blessing of Sacrifice
 		204018,  -- Blessing of Spellwarding
-		210320,  -- Devotion Aura
+		465,  -- Devotion Aura
 		498,    -- Divine Protection
 		642,    -- Divine Shield
 		86659,  -- Guardian of Ancient Kings
