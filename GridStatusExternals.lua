@@ -227,6 +227,30 @@ GridStatusExternals.defaultDB = { --luacheck: ignore 112
 }
 --@end-retail@
 
+--[===[@non-retail@
+GridStatusExternals.defaultDB = { --luacheck: ignore 112
+    debug = false,
+    alert_externals = {
+        enable = true,
+        color = { r = 1, g = 1, b = 0, a = 1 },
+        priority = 99,
+        range = false,
+        showtextas = "caster",
+        active_spellids =  { -- default spells
+            31850,	-- Ardent Defender
+            86659,	-- Guardian of Ancient Kings
+            47788,	-- Guardian Spirit
+            6940, 	-- Hand of Sacrifice
+            33206,	-- Pain Suppression
+            871,	-- Shield Wall
+            61336,	-- Survival Instincts
+        },
+        inactive_spellids = { -- used to remember priority of disabled spells
+        }
+    }
+}
+--@end-non-retail@]===]
+
 local myoptions = {
     ["GSE_header_1"] = {
         type = "header",
@@ -347,9 +371,27 @@ function GridStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 11
     if not GridRoster:IsGUIDInRaid(unitguid) then
         return
     end
+    local name, uicon, count, duration, expirationTime, caster, spellId
+
+    local LibClassicDurations
+    if Plexus:IsClassicWow() then
+        LibClassicDurations = LibStub:GetLibrary("LibClassicDurations", true)
+    end
+    if LibClassicDurations then
+        LibClassicDurations:Register("Plexus")
+        UnitAura = LibClassicDurations.UnitAuraWrapper
+    end
 
     for i =1, 40 do
-        local name, uicon, count, _, duration, expirationTime, _, _, _, spellId = UnitBuff(unitid, i)
+        if (isClassic and LibClassicDurations) then
+            name, uicon, count, _, duration, expirationTime, caster, _, spellId = UnitAura(unit, i, "HELPFUL")
+        end
+        if (not isClassic) then
+            name, uicon, count, _, duration, expirationTime, caster, _, spellId = UnitAura(unit, i, "HELPFUL")
+        end
+        if (isClassic and not LibClassicDurations) then
+            name, uicon, count, _, duration, expirationTime, caster, _, spellId = UnitBuff(unit, i)
+        end
         if not spellId then
             break
         end

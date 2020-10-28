@@ -1,0 +1,10 @@
+package-as: GridStatusExternals
+
+externals:
+   Libs/LibClassicDurations: https://repos.curseforge.com/wow/libclassicdurations
+
+ignore:
+ - .pkgmeta
+ - .gitignore
+ - .gitattributes
+ - .travis.yml
