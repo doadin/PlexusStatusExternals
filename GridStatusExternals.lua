@@ -339,7 +339,8 @@ function GridStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 11
     if not GridRoster:IsGUIDInRaid(unitguid) then
         return
     end
-    local name, uicon, count, duration, expirationTime, caster, spellId, UnitAura
+
+    local name, uicon, count, duration, expirationTime, caster, spellId
 
     local LibClassicDurations
     if Plexus:IsClassicWow() then
@@ -352,13 +353,13 @@ function GridStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 11
 
     for i =1, 40 do
         if (isClassic and LibClassicDurations) then
-            name, uicon, count, _, duration, expirationTime, caster, _, spellId = UnitAura(unitid, i, "HELPFUL")
+            name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
         if (not isClassic) then
-            name, uicon, count, _, duration, expirationTime, caster, _, spellId = UnitAura(unitid, i, "HELPFUL")
+            name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
         if (isClassic and not LibClassicDurations) then
-            name, uicon, count, _, duration, expirationTime, caster, _, spellId = UnitBuff(unitid, i)
+            name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitBuff(unitid, i)
         end
         if not spellId then
             break
