@@ -58,20 +58,17 @@ local tankingbuffs = {
         115176, -- Zen Meditation
     },
     ["PALADIN"] = {
-        204150,  -- Aegis of Light
-        31850,  -- Ardent Defender
-        183415,  -- Aura of Mercy
-        183416,  -- Aura of Sacrifice
-        1044,  -- Blessing of Freedom
-        1022,   -- Blessing of Protection
-        6940,   -- Blessing of Sacrifice
+        31850,   -- Ardent Defender
+        1044,    -- Blessing of Freedom
+        1022,    -- Blessing of Protection
+        6940,    -- Blessing of Sacrifice
         204018,  -- Blessing of Spellwarding
-        210320,  -- Devotion Aura
-        498,    -- Divine Protection
-        642,    -- Divine Shield
-        86659,  -- Guardian of Ancient Kings
-        132403, -- Shield of the Righteous
-        184662, -- Shield of Vengeance
+        465,     -- Devotion Aura
+        498,     -- Divine Protection
+        642,     -- Divine Shield
+        86659,   -- Guardian of Ancient Kings
+        132403,  -- Shield of the Righteous
+        184662,  -- Shield of Vengeance
     },
     ["PRIEST"] = {
         47585,  -- Dispersion
