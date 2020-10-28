@@ -2,15 +2,16 @@
 -- GridStatusExternals
 -- Old Tank Status Cool Downs by Slaren Rezed By Doadin
 ------------------------------------------------------------------------------
+local isClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
 if (IsAddOnLoaded("Grid")) then
-GridStatusExternals = Grid:GetModule("GridStatus"):NewModule("GridStatusExternals")
+    local GridStatusExternals = Grid:GetModule("GridStatus"):NewModule("GridStatusExternals")  --luacheck: ignore 211
 end
 
 if (IsAddOnLoaded("Plexus")) then
-GridStatusExternals = Plexus:GetModule("PlexusStatus"):NewModule("GridStatusExternals")
+    local GridStatusExternals = Plexus:GetModule("PlexusStatus"):NewModule("GridStatusExternals")  --luacheck: ignore 211
 end
-GridStatusExternals.menuName = "Tanking cooldowns"
-
+GridStatusExternals.menuName = "Tanking cooldowns"  --luacheck: ignore 112
+--@retail@
 local tankingbuffs = {
     ["DEATHKNIGHT"] = {
         48707, -- Anti-Magic Shell
@@ -108,27 +109,100 @@ local tankingbuffs = {
         114030, -- Vigilance
     }
 }
+--@end-retail@
 
-GridStatusExternals.tankingbuffs = tankingbuffs
+--[===[@non-retail@
+local tankingbuffs = {
+    ["DRUID"] = {
+        22812,  -- Barkskin
+        102342, -- Ironbark
+        192081, -- Ironfur
+        61336,  -- Survival Instincts
+        740,    -- Tranquility
+    },
+    ["HUNTER"] = {
+        186265,  -- Aspect of the Turtle
+        19263,  -- Deterrence
+    },
+    ["MAGE"] = {
+        157913, -- Evanesce
+        11426,  -- Ice Barrier
+        45438,  -- Ice Block
+        113862, -- Greater Invisibility
+    },
+    ["PALADIN"] = {
+        31850,   -- Ardent Defender
+        1044,    -- Blessing of Freedom
+        1022,    -- Blessing of Protection
+        6940,    -- Blessing of Sacrifice
+        204018,  -- Blessing of Spellwarding
+        465,     -- Devotion Aura
+        498,     -- Divine Protection
+        642,     -- Divine Shield
+        86659,   -- Guardian of Ancient Kings
+        132403,  -- Shield of the Righteous
+        184662,  -- Shield of Vengeance
+    },
+    ["PRIEST"] = {
+        47585,  -- Dispersion
+        64843,  -- Divine Hymn
+        47788,  -- Guardian Spirit
+        33206,  -- Pain Suppression
+        81782,  -- Power Word: Barrier
+        15286,  -- Vampiric Embrace
+    },
+    ["ROGUE"] = {
+        31224,  -- Cloak of Shadows
+        5277,   -- Evasion
+        1966,   -- Feint
+        76577,  -- Smoke Bomb
+    },
+    ["SHAMAN"] = {
+        207399, -- Ancestral Protection Totem
+        108271, -- Astral Shift
+        98008,  -- Spirit Link Totem
+        114893, -- Stone Bulwark Totem
+    },
+    ["WARLOCK"] = {
+        108359, -- Dark Regeneration
+        212295, -- Nether Ward
+        108416, -- Dark Pact
+        104773, -- Unending Resolve
+    },
+    ["WARRIOR"] = {
+        118038, -- Die by the Sword
+        190456, -- Ignore Pain
+        12975,  -- Last Stand
+        97463,  -- Commanding Shout
+        122973, -- Safeguard
+        2565,   -- Shield Block
+        871,    -- Shield Wall
+        23920,  -- Spell Reflection
+        114030, -- Vigilance
+    }
+}
+--@end-non-retail@]===]
+
+GridStatusExternals.tankingbuffs = tankingbuffs --luacheck: ignore 112
 
 -- locals
 if (IsAddOnLoaded("Grid")) then
-local GridRoster = Grid:GetModule("GridRoster")
+local GridRoster = Grid:GetModule("GridRoster") --luacheck: ignore 211
 end
 
 if (IsAddOnLoaded("Plexus")) then
-local GridRoster = Plexus:GetModule("PlexusRoster")
+local GridRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
 end
 local GetSpellInfo = GetSpellInfo
 local UnitBuff = UnitBuff
-local UnitDebuff = UnitDebuff
 local UnitGUID = UnitGUID
 
 local settings
-local spellnames = {}
+local spellnames = {} --luacheck: ignore 241
 local spellid_list = {}
 
-GridStatusExternals.defaultDB = {
+--@retail@
+GridStatusExternals.defaultDB = { --luacheck: ignore 112
     debug = false,
     alert_externals = {
         enable = true,
@@ -151,6 +225,7 @@ GridStatusExternals.defaultDB = {
         }
     }
 }
+--@end-retail@
 
 local myoptions = {
     ["GSE_header_1"] = {
@@ -166,7 +241,7 @@ local myoptions = {
         values = { ["caster"] = "Caster name", ["spell"] = "Spell name" },
         style = "radio",
         get = function() return GridStatusExternals.db.profile.alert_externals.showtextas end,
-        set = function(_, v) GridStatusExternals.db.profile.alert_externals.showtextas = v end,
+        set = function(_, v) GridStatusExternals.db.profile.alert_externals.showtextas = v end, --luacheck: ignore 112
     },
     ["GSE_header_2"] = {
         type = "header",
@@ -186,10 +261,10 @@ local myoptions = {
     },
 }
 
-function GridStatusExternals:OnInitialize()
+function GridStatusExternals:OnInitialize() --luacheck: ignore 112
     self.super.OnInitialize(self)
 
-    for class, buffs in pairs(tankingbuffs) do
+    for class, buffs in pairs(tankingbuffs) do --luacheck: ignore 213
         for _, spellid in pairs(buffs) do
             local sname = GetSpellInfo(spellid)
             if not sname then print(spellid, ": Bad spellid") end
@@ -209,7 +284,7 @@ function GridStatusExternals:OnInitialize()
     -- remove old spellids
     for p, aspellid in ipairs(settings.active_spellids) do
         local found = false
-        for class, buffs in pairs(tankingbuffs) do
+        for class, buffs in pairs(tankingbuffs) do --luacheck: ignore 213
             for _, spellid in pairs(buffs) do
                 if spellid == aspellid then
                     found = true
@@ -232,16 +307,15 @@ function GridStatusExternals:OnInitialize()
     self:UpdateAuraScanList()
 end
 
-function GridStatusExternals:UpdateAuraScanList()
+function GridStatusExternals:UpdateAuraScanList() --luacheck: ignore 212 112
     spellid_list = {}
 
     for _, spellid in ipairs(settings.active_spellids) do
-        _, _, icon = GetSpellInfo(spellid)
         spellid_list[spellid] = true
     end
 end
 
-function GridStatusExternals:OnStatusEnable(status)
+function GridStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
     if status == "alert_externals" then
         self:RegisterEvent("UNIT_AURA", "ScanUnit")
         self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
@@ -249,7 +323,7 @@ function GridStatusExternals:OnStatusEnable(status)
     end
 end
 
-function GridStatusExternals:OnStatusDisable(status)
+function GridStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
     if status == "alert_externals" then
         self:UnregisterEvent("UNIT_AURA")
         self:UnregisterEvent("GROUP_ROSTER_UPDATE")
@@ -257,25 +331,25 @@ function GridStatusExternals:OnStatusDisable(status)
     end
 end
 
-function GridStatusExternals:Grid_UnitJoined(guid, unitid)
+function GridStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
     self:ScanUnit("Grid_UnitJoined", unitid, guid)
 end
 
-function GridStatusExternals:UpdateAllUnits()
+function GridStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in GridRoster:IterateRoster() do
         self:ScanUnit("UpdateAllUnits", unitid, guid)
     end
     self:UpdateAuraScanList()
 end
 
-function GridStatusExternals:ScanUnit(event, unitid, unitguid)
+function GridStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 112
     if not unitguid then unitguid = UnitGUID(unitid) end
     if not GridRoster:IsGUIDInRaid(unitguid) then
         return
     end
 
     for i =1, 40 do
-        local name, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId = UnitBuff(unitid, i)
+        local name, uicon, count, _, duration, expirationTime, _, _, _, spellId = UnitBuff(unitid, i)
         if not spellId then
             break
         end
@@ -302,7 +376,7 @@ function GridStatusExternals:ScanUnit(event, unitid, unitguid)
                         text,
                         0,							-- value
                         nil,						-- maxValue
-                        icon,						-- icon
+                        uicon,						-- icon
                         expirationTime - duration,	-- start
                         duration,					-- duration
                         count)						-- stack
