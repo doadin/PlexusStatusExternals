@@ -175,6 +175,7 @@ do
         }
 
         -- Create spell containers
+        local GridStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("GridStatusExternals")
         local spells = GridStatusExternals.tankingbuffs
 
         local spell_count = 0

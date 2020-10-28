@@ -8,7 +8,6 @@
 ## Title: GridStatusExternals
 ## Notes: Adds a status to Grid for Raid/Personal CDs.
 ## Author: tptbk(Doadin-Malorne-US),(Original GSTC by slaren)
-## Dependencies: GridStatusRaidDebuff
 ## OptionalDeps: Grid, Plexus
 ## X-Curse-Project-ID: 103213
 ## X-credits: slaren

@@ -3,12 +3,13 @@
 -- Old Tank Status Cool Downs by Slaren Rezed By Doadin
 ------------------------------------------------------------------------------
 local isClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
+local GridStatusExternals
 if (IsAddOnLoaded("Grid")) then
-    local GridStatusExternals = Grid:GetModule("GridStatus"):NewModule("GridStatusExternals")  --luacheck: ignore 211
+    GridStatusExternals = Grid:GetModule("GridStatus"):NewModule("GridStatusExternals")  --luacheck: ignore 211
 end
 
 if (IsAddOnLoaded("Plexus")) then
-    local GridStatusExternals = Plexus:GetModule("PlexusStatus"):NewModule("GridStatusExternals")  --luacheck: ignore 211
+    GridStatusExternals = Plexus:GetModule("PlexusStatus"):NewModule("GridStatusExternals")  --luacheck: ignore 211
 end
 GridStatusExternals.menuName = "Tanking cooldowns"  --luacheck: ignore 112
 --@retail@
@@ -186,12 +187,13 @@ local tankingbuffs = {
 GridStatusExternals.tankingbuffs = tankingbuffs --luacheck: ignore 112
 
 -- locals
+local GridRoster
 if (IsAddOnLoaded("Grid")) then
-local GridRoster = Grid:GetModule("GridRoster") --luacheck: ignore 211
+    GridRoster = Grid:GetModule("GridRoster") --luacheck: ignore 211
 end
 
 if (IsAddOnLoaded("Plexus")) then
-local GridRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
+    GridRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
 end
 local GetSpellInfo = GetSpellInfo
 local UnitBuff = UnitBuff
