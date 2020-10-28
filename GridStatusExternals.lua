@@ -116,70 +116,36 @@ local tankingbuffs = {
 local tankingbuffs = {
     ["DRUID"] = {
         22812,  -- Barkskin
-        102342, -- Ironbark
-        192081, -- Ironfur
-        61336,  -- Survival Instincts
         740,    -- Tranquility
     },
     ["HUNTER"] = {
-        186265,  -- Aspect of the Turtle
         19263,  -- Deterrence
     },
     ["MAGE"] = {
-        157913, -- Evanesce
         11426,  -- Ice Barrier
-        45438,  -- Ice Block
-        113862, -- Greater Invisibility
     },
     ["PALADIN"] = {
-        31850,   -- Ardent Defender
         1044,    -- Blessing of Freedom
         1022,    -- Blessing of Protection
         6940,    -- Blessing of Sacrifice
-        204018,  -- Blessing of Spellwarding
         465,     -- Devotion Aura
         498,     -- Divine Protection
         642,     -- Divine Shield
-        86659,   -- Guardian of Ancient Kings
-        132403,  -- Shield of the Righteous
-        184662,  -- Shield of Vengeance
     },
     ["PRIEST"] = {
-        47585,  -- Dispersion
-        64843,  -- Divine Hymn
-        47788,  -- Guardian Spirit
-        33206,  -- Pain Suppression
-        81782,  -- Power Word: Barrier
         15286,  -- Vampiric Embrace
     },
     ["ROGUE"] = {
-        31224,  -- Cloak of Shadows
         5277,   -- Evasion
-        1966,   -- Feint
-        76577,  -- Smoke Bomb
     },
     ["SHAMAN"] = {
-        207399, -- Ancestral Protection Totem
-        108271, -- Astral Shift
-        98008,  -- Spirit Link Totem
-        114893, -- Stone Bulwark Totem
     },
     ["WARLOCK"] = {
-        108359, -- Dark Regeneration
-        212295, -- Nether Ward
-        108416, -- Dark Pact
-        104773, -- Unending Resolve
     },
     ["WARRIOR"] = {
-        118038, -- Die by the Sword
-        190456, -- Ignore Pain
         12975,  -- Last Stand
-        97463,  -- Commanding Shout
-        122973, -- Safeguard
         2565,   -- Shield Block
         871,    -- Shield Wall
-        23920,  -- Spell Reflection
-        114030, -- Vigilance
     }
 }
 --@end-non-retail@]===]
@@ -239,13 +205,13 @@ GridStatusExternals.defaultDB = { --luacheck: ignore 112
         range = false,
         showtextas = "caster",
         active_spellids =  { -- default spells
-            31850,	-- Ardent Defender
-            86659,	-- Guardian of Ancient Kings
-            47788,	-- Guardian Spirit
-            6940, 	-- Hand of Sacrifice
-            33206,	-- Pain Suppression
-            871,	-- Shield Wall
-            61336,	-- Survival Instincts
+            12975, -- Last Stand
+            19263, -- Deterrence
+            465,   -- Devotion Aura
+            498, -- Divine Protection
+            642, -- Divine Shield
+            22812, -- Barkskin
+            5277, -- Evasion
         },
         inactive_spellids = { -- used to remember priority of disabled spells
         }
