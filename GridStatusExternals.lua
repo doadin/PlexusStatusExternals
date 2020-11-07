@@ -343,7 +343,7 @@ function GridStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 11
     local name, uicon, count, duration, expirationTime, caster, spellId
 
     local LibClassicDurations
-    if Plexus:IsClassicWow() then
+    if isClassic then
         LibClassicDurations = LibStub:GetLibrary("LibClassicDurations", true)
     end
     if LibClassicDurations then
