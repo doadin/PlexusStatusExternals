@@ -5,9 +5,9 @@
 ## Interface: 11305
 #@end-non-retail@
 ## Version: @project-version@
-## Title: GridStatusExternals
-## Notes: Adds a status to Grid for Raid/Personal CDs.
-## Author: tptbk(Doadin-Malorne-US),(Original GSTC by slaren)
+## Title: PlexusStatusExternals
+## Notes: Adds a status to Plexus for Raid/Personal CDs.
+## Author: Doadin,(Original GSTC by slaren)
 ## OptionalDeps: Grid, Plexus
 ## X-Curse-Project-ID: 103213
 ## X-credits: slaren
@@ -17,4 +17,4 @@ Libs\LibClassicDurations\LibClassicDurations.xml
 #@end-non-retail@
 
 SpellsWidget.lua
-GridStatusExternals.lua
+PlexusStatusExternals.lua
