@@ -8,7 +8,7 @@
 ## Title: PlexusStatusExternals
 ## Notes: Adds a status to Plexus for Raid/Personal CDs.
 ## Author: Doadin,(Original GSTC by slaren)
-## OptionalDeps: Grid, Plexus
+## Dependencies: Plexus
 ## X-Curse-Project-ID: 103213
 ## X-credits: slaren
 
