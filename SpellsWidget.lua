@@ -1,7 +1,7 @@
 local AceGUI = LibStub("AceGUI-3.0")
 
 do
-    local widgetType = "GSE-SpellsConfig"
+    local widgetType = "PSE-SpellsConfig"
     local widgetVersion = 1
     local SPELL_HEIGHT = 24
 
@@ -86,7 +86,8 @@ do
         end
 
         UpdateSpells(self)
-        GridStatusExternals:UpdateAllUnits()
+        local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("PlexusStatusExternals")
+        PlexusStatusExternals:UpdateAllUnits()
     end
 
     local function UpButton_Click(frame)
@@ -105,7 +106,8 @@ do
             end
 
             UpdateSpells(self)
-            GridStatusExternals:UpdateAllUnits()
+            local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("PlexusStatusExternals")
+            PlexusStatusExternals:UpdateAllUnits()
         end
     end
 
@@ -125,7 +127,8 @@ do
             end
 
             UpdateSpells(self)
-            GridStatusExternals:UpdateAllUnits()
+            local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("PlexusStatusExternals")
+            PlexusStatusExternals:UpdateAllUnits()
         end
     end
 
@@ -175,8 +178,8 @@ do
         }
 
         -- Create spell containers
-        local GridStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("GridStatusExternals")
-        local spells = GridStatusExternals.tankingbuffs
+        local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("PlexusStatusExternals")
+        local spells = PlexusStatusExternals.tankingbuffs
 
         local spell_count = 0
         for _, cspells in pairs(spells) do
@@ -269,8 +272,8 @@ do
         widget.frame = frame
         widget.spell_containers = spell_containers
         widget.spells = spells
-        widget.active_spellids = GridStatusExternals.db.profile.alert_externals.active_spellids
-        widget.inactive_spellids = GridStatusExternals.db.profile.alert_externals.inactive_spellids
+        widget.active_spellids = PlexusStatusExternals.db.profile.alert_externals.active_spellids
+        widget.inactive_spellids = PlexusStatusExternals.db.profile.alert_externals.inactive_spellids
 
         AceGUI:RegisterAsWidget(widget)
 

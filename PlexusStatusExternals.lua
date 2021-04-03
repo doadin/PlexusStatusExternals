@@ -1,17 +1,11 @@
 ------------------------------------------------------------------------------
--- GridStatusExternals
+-- PlexusStatusExternals
 -- Old Tank Status Cool Downs by Slaren Rezed By Doadin
 ------------------------------------------------------------------------------
 local isClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
-local GridStatusExternals
-if (IsAddOnLoaded("Grid")) then
-    GridStatusExternals = Grid:GetModule("GridStatus"):NewModule("GridStatusExternals")  --luacheck: ignore 211
-end
+local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):NewModule("PlexusStatusExternals")  --luacheck: ignore 211
+PlexusStatusExternals.menuName = "Tanking cooldowns"  --luacheck: ignore 112
 
-if (IsAddOnLoaded("Plexus")) then
-    GridStatusExternals = Plexus:GetModule("PlexusStatus"):NewModule("GridStatusExternals")  --luacheck: ignore 211
-end
-GridStatusExternals.menuName = "Tanking cooldowns"  --luacheck: ignore 112
 --@retail@
 local tankingbuffs = {
     ["DEATHKNIGHT"] = {
@@ -26,7 +20,7 @@ local tankingbuffs = {
     ["DEMONHUNTER"] = {
         198589, -- Blur
         209426,  -- Darkness
-        203720,  -- Demon Spikes
+        203819,  -- Demon Spikes
         187827,  -- Metamorphosis
         207810,  -- Nether Bond
     },
@@ -45,6 +39,8 @@ local tankingbuffs = {
     ["MAGE"] = {
         157913, -- Evanesce
         11426,  -- Ice Barrier
+        235313, -- Blazing Barrier
+        235450, -- Prismatic Barrier
         45438,  -- Ice Block
         113862, -- Greater Invisibility
     },
@@ -150,17 +146,10 @@ local tankingbuffs = {
 }
 --@end-non-retail@]===]
 
-GridStatusExternals.tankingbuffs = tankingbuffs --luacheck: ignore 112
+PlexusStatusExternals.tankingbuffs = tankingbuffs --luacheck: ignore 112
 
 -- locals
-local GridRoster
-if (IsAddOnLoaded("Grid")) then
-    GridRoster = Grid:GetModule("GridRoster") --luacheck: ignore 211
-end
-
-if (IsAddOnLoaded("Plexus")) then
-    GridRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
-end
+local PlexusRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
 local GetSpellInfo = GetSpellInfo
 local UnitBuff = UnitBuff
 local UnitGUID = UnitGUID
@@ -170,7 +159,7 @@ local spellnames = {} --luacheck: ignore 241
 local spellid_list = {}
 
 --@retail@
-GridStatusExternals.defaultDB = { --luacheck: ignore 112
+PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
     debug = false,
     alert_externals = {
         enable = true,
@@ -196,7 +185,7 @@ GridStatusExternals.defaultDB = { --luacheck: ignore 112
 --@end-retail@
 
 --[===[@non-retail@
-GridStatusExternals.defaultDB = { --luacheck: ignore 112
+PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
     debug = false,
     alert_externals = {
         enable = true,
@@ -232,8 +221,8 @@ local myoptions = {
         desc = "Text to show when assigned to an indicator capable of displaying text",
         values = { ["caster"] = "Caster name", ["spell"] = "Spell name" },
         style = "radio",
-        get = function() return GridStatusExternals.db.profile.alert_externals.showtextas end,
-        set = function(_, v) GridStatusExternals.db.profile.alert_externals.showtextas = v end, --luacheck: ignore 112
+        get = function() return PlexusStatusExternals.db.profile.alert_externals.showtextas end,
+        set = function(_, v) PlexusStatusExternals.db.profile.alert_externals.showtextas = v end, --luacheck: ignore 112
     },
     ["GSE_header_2"] = {
         type = "header",
@@ -243,7 +232,7 @@ local myoptions = {
     ["spells_description"] = {
         type = "description",
         order = 204,
-        name = "Check the spells that you want GridStatusExternals to keep track of. Their position on the list defines their priority in the case that a unit has more than one of them.",
+        name = "Check the spells that you want PlexusStatusExternals to keep track of. Their position on the list defines their priority in the case that a unit has more than one of them.",
     },
     ["spells"] = {
         type = "input",
@@ -253,7 +242,7 @@ local myoptions = {
     },
 }
 
-function GridStatusExternals:OnInitialize() --luacheck: ignore 112
+function PlexusStatusExternals:OnInitialize() --luacheck: ignore 112
     self.super.OnInitialize(self)
 
     for class, buffs in pairs(tankingbuffs) do --luacheck: ignore 213
@@ -299,7 +288,7 @@ function GridStatusExternals:OnInitialize() --luacheck: ignore 112
     self:UpdateAuraScanList()
 end
 
-function GridStatusExternals:UpdateAuraScanList() --luacheck: ignore 212 112
+function PlexusStatusExternals:UpdateAuraScanList() --luacheck: ignore 212 112
     spellid_list = {}
 
     for _, spellid in ipairs(settings.active_spellids) do
@@ -307,7 +296,7 @@ function GridStatusExternals:UpdateAuraScanList() --luacheck: ignore 212 112
     end
 end
 
-function GridStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
+function PlexusStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
     if status == "alert_externals" then
         self:RegisterEvent("UNIT_AURA", "ScanUnit")
         self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
@@ -315,7 +304,7 @@ function GridStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
     end
 end
 
-function GridStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
+function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
     if status == "alert_externals" then
         self:UnregisterEvent("UNIT_AURA")
         self:UnregisterEvent("GROUP_ROSTER_UPDATE")
@@ -323,20 +312,20 @@ function GridStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
     end
 end
 
-function GridStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
+function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
     self:ScanUnit("Grid_UnitJoined", unitid, guid)
 end
 
-function GridStatusExternals:UpdateAllUnits() --luacheck: ignore 112
-    for guid, unitid in GridRoster:IterateRoster() do
+function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
+    for guid, unitid in PlexusRoster:IterateRoster() do
         self:ScanUnit("UpdateAllUnits", unitid, guid)
     end
     self:UpdateAuraScanList()
 end
 
-function GridStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 112
+function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 112
     if not unitguid then unitguid = UnitGUID(unitid) end
-    if not GridRoster:IsGUIDInRaid(unitguid) then
+    if not PlexusRoster:IsGUIDInRaid(unitguid) then
         return
     end
 
