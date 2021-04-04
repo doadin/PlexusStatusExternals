@@ -209,7 +209,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
 --@end-non-retail@]===]
 
 local myoptions = {
-    ["GSE_header_1"] = {
+    ["PSE_header_1"] = {
         type = "header",
         order = 200,
         name = "Options",
@@ -224,7 +224,7 @@ local myoptions = {
         get = function() return PlexusStatusExternals.db.profile.alert_externals.showtextas end,
         set = function(_, v) PlexusStatusExternals.db.profile.alert_externals.showtextas = v end, --luacheck: ignore 112
     },
-    ["GSE_header_2"] = {
+    ["PSE_header_2"] = {
         type = "header",
         order = 203,
         name = "Spells",
@@ -238,7 +238,7 @@ local myoptions = {
         type = "input",
         order = 205,
         name = "Spells",
-        control = "GSE-SpellsConfig",
+        control = "PSE-SpellsConfig",
     },
 }
 
