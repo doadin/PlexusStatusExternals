@@ -238,6 +238,10 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             108271, -- Astral Shift
             108416, -- Dark Pact
             104773, -- Unending Resolve
+            1044,    -- Blessing of Freedom
+            1022,    -- Blessing of Protection
+            204018,  -- Blessing of Spellwarding
+            465,     -- Devotion Aura
         },
         inactive_spellids = { -- used to remember priority of disabled spells
         }
