@@ -188,6 +188,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             184662,  -- Shield of Vengeance
             48792, 	-- Icebound Fortitude
             195181, -- Bone Shield
+            48707, -- Anti-Magic Shell
             49028, -- Dancing Rune Weapon
             55233, -- Vampiric Blood
             77535, -- Blood Shield
@@ -201,6 +202,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             122783, -- Diffuse Magic
             115176, -- Zen Meditation
             871,	-- Shield Wall
+            12975,  -- Last Stand
             23920,  -- Spell Reflection
             190456, -- Ignore Pain
             2565,   -- Shield Block
@@ -209,7 +211,6 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             203819,  -- Demon Spikes
             209426,  -- Darkness
             198589, -- Blur
-            12975,  -- Last Stand
             97463,  -- Commanding Shout
             740,    -- Tranquility
             64843,  -- Divine Hymn
@@ -217,6 +218,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             98008,  -- Spirit Link Totem
             114893, -- Stone Bulwark Totem
             81782,  -- Power Word: Barrier
+            50461, -- Anti-Magic Zone
             15286,  -- Vampiric Embrace
             47788,	-- Guardian Spirit
             33206,	-- Pain Suppression
@@ -225,6 +227,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             124275, -- Light Stagger
             124274, -- Moderate Stagger
             124273, -- Heavy Stagger
+            118038, -- Die by the Sword
             186265,  -- Aspect of the Turtle
             45438,  -- Ice Block
             11426,  -- Ice Barrier
