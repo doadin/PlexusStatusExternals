@@ -2,12 +2,23 @@
 -- PlexusStatusExternals
 -- Old Tank Status Cool Downs by Slaren Rezed By Doadin
 ------------------------------------------------------------------------------
-local isClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
+
+local function IsClassicWow()
+	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+end
+
+local function IsTBCWow()
+	return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+end
+
+local function IsRetailWow()
+	return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+end
 local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):NewModule("PlexusStatusExternals")  --luacheck: ignore 211
 PlexusStatusExternals.menuName = "Tanking cooldowns"  --luacheck: ignore 112
-
---@retail@
-local tankingbuffs = {
+local tankingbuffs
+if IsRetailWow() then
+tankingbuffs = {
     ["DEATHKNIGHT"] = {
         48707, -- Anti-Magic Shell
         50461, -- Anti-Magic Zone
@@ -106,10 +117,10 @@ local tankingbuffs = {
         114030, -- Vigilance
     }
 }
---@end-retail@
+end
 
---[===[@non-retail@
-local tankingbuffs = {
+if IsClassicWow() or IsTBCWow() then
+tankingbuffs = {
     ["DRUID"] = {
         22812,  -- Barkskin
         740,    -- Tranquility
@@ -119,6 +130,7 @@ local tankingbuffs = {
     },
     ["MAGE"] = {
         11426,  -- Ice Barrier
+        168, -- Frost Armor
     },
     ["PALADIN"] = {
         1044,    -- Blessing of Freedom
@@ -144,7 +156,7 @@ local tankingbuffs = {
         871,    -- Shield Wall
     }
 }
---@end-non-retail@]===]
+end
 
 PlexusStatusExternals.tankingbuffs = tankingbuffs --luacheck: ignore 112
 
@@ -158,7 +170,7 @@ local settings
 local spellnames = {} --luacheck: ignore 241
 local spellid_list = {}
 
---@retail@
+if IsRetailWow() then
 PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
     debug = false,
     alert_externals = {
@@ -168,23 +180,72 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
         range = false,
         showtextas = "caster",
         active_spellids =  { -- default spells
-            31850,	-- Ardent Defender
             86659,	-- Guardian of Ancient Kings
-            47788,	-- Guardian Spirit
-            6940, 	-- Hand of Sacrifice
+            31850,	-- Ardent Defender
+            642,     -- Divine Shield
+            498,     -- Divine Protection
+            132403,  -- Shield of the Righteous
+            184662,  -- Shield of Vengeance
             48792, 	-- Icebound Fortitude
-            33206,	-- Pain Suppression
-            871,	-- Shield Wall
+            195181, -- Bone Shield
+            49028, -- Dancing Rune Weapon
+            55233, -- Vampiric Blood
+            77535, -- Blood Shield
             61336,	-- Survival Instincts
+            22812,  -- Barkskin
+            192081, -- Ironfur
+            102342, -- Ironbark
             243435, -- Fortifying Brew
+            115308, -- Elusive Brew
+            122278, -- Dampen Harm
+            122783, -- Diffuse Magic
+            115176, -- Zen Meditation
+            871,	-- Shield Wall
+            23920,  -- Spell Reflection
+            190456, -- Ignore Pain
+            2565,   -- Shield Block
+            114030, -- Vigilance
+            187827,  -- Metamorphosis
+            203819,  -- Demon Spikes
+            209426,  -- Darkness
+            198589, -- Blur
+            12975,  -- Last Stand
+            97463,  -- Commanding Shout
+            740,    -- Tranquility
+            64843,  -- Divine Hymn
+            207399, -- Ancestral Protection Totem
+            98008,  -- Spirit Link Totem
+            114893, -- Stone Bulwark Totem
+            81782,  -- Power Word: Barrier
+            15286,  -- Vampiric Embrace
+            47788,	-- Guardian Spirit
+            33206,	-- Pain Suppression
+            6940, 	-- Hand of Sacrifice
+            116849, -- Life Cocoon
+            124275, -- Light Stagger
+            124274, -- Moderate Stagger
+            124273, -- Heavy Stagger
+            186265,  -- Aspect of the Turtle
+            45438,  -- Ice Block
+            11426,  -- Ice Barrier
+            235313, -- Blazing Barrier
+            235450, -- Prismatic Barrier
+            47585,  -- Dispersion
+            31224,  -- Cloak of Shadows
+            5277,   -- Evasion
+            1966,   -- Feint
+            76577,  -- Smoke Bomb
+            108271, -- Astral Shift
+            108416, -- Dark Pact
+            104773, -- Unending Resolve
         },
         inactive_spellids = { -- used to remember priority of disabled spells
         }
     }
 }
---@end-retail@
+end
 
---[===[@non-retail@
+if IsClassicWow() or IsTBCWow() then
 PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
     debug = false,
     alert_externals = {
@@ -194,19 +255,28 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
         range = false,
         showtextas = "caster",
         active_spellids =  { -- default spells
+            871,    -- Shield Wall
             12975, -- Last Stand
-            19263, -- Deterrence
-            465,   -- Devotion Aura
+            2565,   -- Shield Block
             498, -- Divine Protection
             642, -- Divine Shield
             22812, -- Barkskin
+            740,    -- Tranquility
+            1022,    -- Blessing of Protection
+            6940,    -- Blessing of Sacrifice
+            1044,    -- Blessing of Freedom
+            465,   -- Devotion Aura
+            19263, -- Deterrence
             5277, -- Evasion
+            11426,  -- Ice Barrier
+            168, -- Frost Armor
+            15286,  -- Vampiric Embrace
         },
         inactive_spellids = { -- used to remember priority of disabled spells
         }
     }
 }
---@end-non-retail@]===]
+end
 
 local myoptions = {
     ["PSE_header_1"] = {
@@ -332,7 +402,7 @@ function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 
     local name, uicon, count, duration, expirationTime, caster, spellId
 
     local LibClassicDurations
-    if isClassic then
+    if IsClassicWow() then
         LibClassicDurations = LibStub:GetLibrary("LibClassicDurations", true)
     end
     if LibClassicDurations then
@@ -341,13 +411,13 @@ function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 
     end
 
     for i =1, 40 do
-        if (isClassic and LibClassicDurations) then
+        if (IsClassicWow() and LibClassicDurations) then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
-        if (not isClassic) then
+        if IsRetailWow() then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
-        if (isClassic and not LibClassicDurations) then
+        if (IsClassicWow() and not LibClassicDurations) then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitBuff(unitid, i)
         end
         if not spellId then
