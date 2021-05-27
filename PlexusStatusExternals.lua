@@ -4,15 +4,15 @@
 ------------------------------------------------------------------------------
 
 local function IsClassicWow()
-	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 end
 
 local function IsTBCWow()
-	return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+    return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
 end
 
 local function IsRetailWow()
-	return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 end
 local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):NewModule("PlexusStatusExternals")  --luacheck: ignore 211
 PlexusStatusExternals.menuName = "Tanking cooldowns"  --luacheck: ignore 112
@@ -144,7 +144,7 @@ tankingbuffs = {
         15286,  -- Vampiric Embrace
     },
     ["ROGUE"] = {
-        5277,   -- Evasion
+        26669,   -- Evasion
     },
     ["SHAMAN"] = {
     },
@@ -274,7 +274,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             1044,    -- Blessing of Freedom
             465,   -- Devotion Aura
             19263, -- Deterrence
-            5277, -- Evasion
+            26669, -- Evasion
             11426,  -- Ice Barrier
             168, -- Frost Armor
             15286,  -- Vampiric Embrace
@@ -421,7 +421,7 @@ function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 
         if (IsClassicWow() and LibClassicDurations) then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
-        if IsRetailWow() then
+        if IsRetailWow() or IsTBCWow() then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
         if (IsClassicWow() and not LibClassicDurations) then
