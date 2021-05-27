@@ -10,9 +10,9 @@
 ## X-Curse-Project-ID: 103213
 ## X-credits: slaren
 
-#@non-retail@
+#@version-classic@
 Libs\LibClassicDurations\LibClassicDurations.xml
-#@end-non-retail@
+#@end-version-classic@
 
 SpellsWidget.lua
 PlexusStatusExternals.lua
