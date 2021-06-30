@@ -48,7 +48,6 @@ tankingbuffs = {
         19263,  -- Deterrence
     },
     ["MAGE"] = {
-        157913, -- Evanesce
         11426,  -- Ice Barrier
         235313, -- Blazing Barrier
         235450, -- Prismatic Barrier
