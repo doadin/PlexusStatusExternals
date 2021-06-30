@@ -118,7 +118,45 @@ tankingbuffs = {
 }
 end
 
-if IsClassicWow() or IsTBCWow() then
+if IsClassicWow() then
+    tankingbuffs = {
+        ["DRUID"] = {
+            22812,  -- Barkskin
+            740,    -- Tranquility
+        },
+        ["HUNTER"] = {
+            19263,  -- Deterrence
+        },
+        ["MAGE"] = {
+            11426,  -- Ice Barrier
+            168, -- Frost Armor
+        },
+        ["PALADIN"] = {
+            1044,    -- Blessing of Freedom
+            1022,    -- Blessing of Protection
+            6940,    -- Blessing of Sacrifice
+            465,     -- Devotion Aura
+            498,     -- Divine Protection
+            642,     -- Divine Shield
+        },
+        ["PRIEST"] = {
+            15286,  -- Vampiric Embrace
+        },
+        ["ROGUE"] = {
+        },
+        ["SHAMAN"] = {
+        },
+        ["WARLOCK"] = {
+        },
+        ["WARRIOR"] = {
+            12975,  -- Last Stand
+            2565,   -- Shield Block
+            871,    -- Shield Wall
+        }
+    }
+    end
+
+if IsTBCWow() then
 tankingbuffs = {
     ["DRUID"] = {
         22812,  -- Barkskin
