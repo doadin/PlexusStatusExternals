@@ -143,6 +143,7 @@ if IsClassicWow() then
             15286,  -- Vampiric Embrace
         },
         ["ROGUE"] = {
+            5277,   -- Evasion
         },
         ["SHAMAN"] = {
         },
@@ -181,7 +182,7 @@ tankingbuffs = {
         15286,  -- Vampiric Embrace
     },
     ["ROGUE"] = {
-        26669,   -- Evasion
+        5277,   -- Evasion
     },
     ["SHAMAN"] = {
     },
@@ -217,71 +218,71 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
         range = false,
         showtextas = "caster",
         active_spellids =  { -- default spells
-            86659,	-- Guardian of Ancient Kings
-            31850,	-- Ardent Defender
-            642,     -- Divine Shield
-            498,     -- Divine Protection
-            132403,  -- Shield of the Righteous
-            184662,  -- Shield of Vengeance
-            48792, 	-- Icebound Fortitude
-            195181, -- Bone Shield
-            48707, -- Anti-Magic Shell
-            49028, -- Dancing Rune Weapon
-            55233, -- Vampiric Blood
-            77535, -- Blood Shield
-            61336,	-- Survival Instincts
-            22812,  -- Barkskin
-            192081, -- Ironfur
-            102342, -- Ironbark
-            243435, -- Fortifying Brew
-            115308, -- Elusive Brew
-            122278, -- Dampen Harm
-            122783, -- Diffuse Magic
-            115176, -- Zen Meditation
-            871,	-- Shield Wall
-            12975,  -- Last Stand
-            23920,  -- Spell Reflection
-            190456, -- Ignore Pain
-            2565,   -- Shield Block
-            114030, -- Vigilance
-            187827,  -- Metamorphosis
-            203819,  -- Demon Spikes
-            209426,  -- Darkness
-            198589, -- Blur
-            97463,  -- Commanding Shout
-            740,    -- Tranquility
-            64843,  -- Divine Hymn
-            207399, -- Ancestral Protection Totem
-            98008,  -- Spirit Link Totem
-            114893, -- Stone Bulwark Totem
-            81782,  -- Power Word: Barrier
-            50461, -- Anti-Magic Zone
-            15286,  -- Vampiric Embrace
-            47788,	-- Guardian Spirit
-            33206,	-- Pain Suppression
-            6940, 	-- Hand of Sacrifice
-            116849, -- Life Cocoon
-            124275, -- Light Stagger
-            124274, -- Moderate Stagger
-            124273, -- Heavy Stagger
-            118038, -- Die by the Sword
-            186265,  -- Aspect of the Turtle
-            45438,  -- Ice Block
-            11426,  -- Ice Barrier
-            235313, -- Blazing Barrier
-            235450, -- Prismatic Barrier
-            47585,  -- Dispersion
-            31224,  -- Cloak of Shadows
-            5277,   -- Evasion
-            1966,   -- Feint
-            76577,  -- Smoke Bomb
-            108271, -- Astral Shift
-            108416, -- Dark Pact
-            104773, -- Unending Resolve
-            1044,    -- Blessing of Freedom
-            1022,    -- Blessing of Protection
-            204018,  -- Blessing of Spellwarding
-            465,     -- Devotion Aura
+            --86659,	-- Guardian of Ancient Kings
+            --31850,	-- Ardent Defender
+            --642,     -- Divine Shield
+            --498,     -- Divine Protection
+            --132403,  -- Shield of the Righteous
+            --184662,  -- Shield of Vengeance
+            --48792, 	-- Icebound Fortitude
+            --195181, -- Bone Shield
+            --48707, -- Anti-Magic Shell
+            --49028, -- Dancing Rune Weapon
+            --55233, -- Vampiric Blood
+            --77535, -- Blood Shield
+            --61336,	-- Survival Instincts
+            --22812,  -- Barkskin
+            --192081, -- Ironfur
+            --102342, -- Ironbark
+            --243435, -- Fortifying Brew
+            --115308, -- Elusive Brew
+            --122278, -- Dampen Harm
+            --122783, -- Diffuse Magic
+            --115176, -- Zen Meditation
+            --871,	-- Shield Wall
+            --12975,  -- Last Stand
+            --23920,  -- Spell Reflection
+            --190456, -- Ignore Pain
+            --2565,   -- Shield Block
+            --114030, -- Vigilance
+            --187827,  -- Metamorphosis
+            --203819,  -- Demon Spikes
+            --209426,  -- Darkness
+            --198589, -- Blur
+            --97463,  -- Commanding Shout
+            --740,    -- Tranquility
+            --64843,  -- Divine Hymn
+            --207399, -- Ancestral Protection Totem
+            --98008,  -- Spirit Link Totem
+            --114893, -- Stone Bulwark Totem
+            --81782,  -- Power Word: Barrier
+            --50461, -- Anti-Magic Zone
+            --15286,  -- Vampiric Embrace
+            --47788,	-- Guardian Spirit
+            --33206,	-- Pain Suppression
+            --6940, 	-- Hand of Sacrifice
+            --116849, -- Life Cocoon
+            --124275, -- Light Stagger
+            --124274, -- Moderate Stagger
+            --124273, -- Heavy Stagger
+            --118038, -- Die by the Sword
+            --186265,  -- Aspect of the Turtle
+            --45438,  -- Ice Block
+            --11426,  -- Ice Barrier
+            --235313, -- Blazing Barrier
+            --235450, -- Prismatic Barrier
+            --47585,  -- Dispersion
+            --31224,  -- Cloak of Shadows
+            --5277,   -- Evasion
+            --1966,   -- Feint
+            --76577,  -- Smoke Bomb
+            --108271, -- Astral Shift
+            --108416, -- Dark Pact
+            --104773, -- Unending Resolve
+            --1044,    -- Blessing of Freedom
+            --1022,    -- Blessing of Protection
+            --204018,  -- Blessing of Spellwarding
+            --465,     -- Devotion Aura
         },
         inactive_spellids = { -- used to remember priority of disabled spells
         }
@@ -299,22 +300,22 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
         range = false,
         showtextas = "caster",
         active_spellids =  { -- default spells
-            871,    -- Shield Wall
-            12975, -- Last Stand
-            2565,   -- Shield Block
-            498, -- Divine Protection
-            642, -- Divine Shield
-            22812, -- Barkskin
-            740,    -- Tranquility
-            1022,    -- Blessing of Protection
-            6940,    -- Blessing of Sacrifice
-            1044,    -- Blessing of Freedom
-            465,   -- Devotion Aura
-            19263, -- Deterrence
-            26669, -- Evasion
-            11426,  -- Ice Barrier
-            168, -- Frost Armor
-            15286,  -- Vampiric Embrace
+            --871,    -- Shield Wall
+            --12975, -- Last Stand
+            --2565,   -- Shield Block
+            --498, -- Divine Protection
+            --642, -- Divine Shield
+            --22812, -- Barkskin
+            --740,    -- Tranquility
+            --1022,    -- Blessing of Protection
+            --6940,    -- Blessing of Sacrifice
+            --1044,    -- Blessing of Freedom
+            --465,   -- Devotion Aura
+            --19263, -- Deterrence
+            --11426,  -- Ice Barrier
+            --168, -- Frost Armor
+            --5277,   -- Evasion
+            --15286,  -- Vampiric Embrace
         },
         inactive_spellids = { -- used to remember priority of disabled spells
         }
