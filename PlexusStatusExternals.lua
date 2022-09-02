@@ -3,17 +3,22 @@
 -- Old Tank Status Cool Downs by Slaren Rezed By Doadin
 ------------------------------------------------------------------------------
 
-local function IsClassicWow()
-    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+local function IsClassicWow() --luacheck: ignore 212
+	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 end
 
-local function IsTBCWow()
-    return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+local function IsTBCWow() --luacheck: ignore 212
+	return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_BURNING_CRUSADE
 end
 
-local function IsRetailWow()
-    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+local function IsWrathWow() --luacheck: ignore 212
+	return WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_WRATH_OF_THE_LICH_KING
 end
+
+local function IsRetailWow() --luacheck: ignore 212
+	return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+end
+
 local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):NewModule("PlexusStatusExternals")  --luacheck: ignore 211
 PlexusStatusExternals.menuName = "Tanking cooldowns"  --luacheck: ignore 112
 local tankingbuffs
@@ -157,7 +162,7 @@ if IsClassicWow() then
     }
     end
 
-if IsTBCWow() then
+if IsTBCWow() or IsWrathWow() then
 tankingbuffs = {
     ["DRUID"] = {
         22812,  -- Barkskin
@@ -290,7 +295,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
 }
 end
 
-if IsClassicWow() or IsTBCWow() then
+if IsClassicWow() or IsTBCWow() or IsWrathWow() then
 PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
     debug = false,
     alert_externals = {
@@ -459,7 +464,7 @@ function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 
         if (IsClassicWow() and LibClassicDurations) then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
-        if IsRetailWow() or IsTBCWow() then
+        if IsRetailWow() or IsTBCWow() or IsWrathWow() then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
         if (IsClassicWow() and not LibClassicDurations) then
