@@ -559,7 +559,7 @@ function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 
         if (IsClassicWow() and LibClassicDurations) then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
-        if IsTBCWow() then
+	if IsTBCWow() or IsWrathWow()
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
         if (IsClassicWow() and not LibClassicDurations) then
