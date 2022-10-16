@@ -218,8 +218,12 @@ local PlexusRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
 local GetSpellInfo = GetSpellInfo
 local UnitBuff = UnitBuff
 local UnitGUID = UnitGUID
-local GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
-local ForEachAura = AuraUtil.ForEachAura
+local GetAuraDataByAuraInstanceID
+local ForEachAura
+if IsRetailWow() then
+    GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
+    ForEachAura = AuraUtil.ForEachAura
+end
 
 local settings
 local spellnames = {} --luacheck: ignore 241
@@ -432,10 +436,10 @@ end
 function PlexusStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
     if status == "alert_externals" then
         if IsRetailWow() then
-	    self:RegisterEvent("UNIT_AURA", "ScanUnitByAuraInfo")
-	else
-	    self:RegisterEvent("UNIT_AURA", "ScanUnit")
-	end
+	        self:RegisterEvent("UNIT_AURA", "ScanUnitByAuraInfo")
+	    else
+	        self:RegisterEvent("UNIT_AURA", "ScanUnit")
+	    end
         self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
         self:UpdateAllUnits()
     end
@@ -450,7 +454,9 @@ function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
 end
 
 function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
-    self:ScanUnit("Grid_UnitJoined", unitid, guid)
+    if IsClassicWow() or IsTBCWow() or IsWrathWow() then
+        self:ScanUnit("Grid_UnitJoined", unitid, guid)
+    end
 end
 
 function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
