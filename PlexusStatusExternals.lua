@@ -48,12 +48,6 @@ tankingbuffs = {
         61336,  -- Survival Instincts
         740,    -- Tranquility
     },
-    ["EVOKER"] = {
-	    357170, -- Time Dilation
-	    363534, -- Rewind
-	    363916, -- Obsidian Scale
-	    374348, -- Renewing Blaze
-    },
     ["HUNTER"] = {
         186265,  -- Aspect of the Turtle
         19263,  -- Deterrence
@@ -127,6 +121,16 @@ tankingbuffs = {
         114030, -- Vigilance
     }
 }
+end
+
+local version, build, date, tocversion = GetBuildInfo()
+if tocversion >= 100000 then
+    tankingbuffs["EVOKER"] = {
+        357170, -- Time Dilation
+        363534, -- Rewind
+        363916, -- Obsidian Scale
+        374348, -- Renewing Blaze
+    }
 end
 
 if IsClassicWow() then
