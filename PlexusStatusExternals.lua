@@ -220,9 +220,11 @@ local UnitBuff = UnitBuff
 local UnitGUID = UnitGUID
 local GetAuraDataByAuraInstanceID
 local ForEachAura
-if IsRetailWow() then
-    GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
-    ForEachAura = AuraUtil.ForEachAura
+if tocversion >= 100000 then
+    if IsRetailWow() then
+        GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
+        ForEachAura = AuraUtil.ForEachAura
+    end
 end
 
 local settings
@@ -435,7 +437,7 @@ end
 
 function PlexusStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
     if status == "alert_externals" then
-        if IsRetailWow() then
+        if IsRetailWow() and tocversion >= 100000 then
 	        self:RegisterEvent("UNIT_AURA", "ScanUnitByAuraInfo")
 	    else
 	        self:RegisterEvent("UNIT_AURA", "ScanUnit")
@@ -454,19 +456,19 @@ function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
 end
 
 function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
-    if IsRetailWow() then
+    if IsRetailWow() and tocversion >= 100000 then
         local unitauraInfo = {}
         ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
         self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
     end
-    if IsClassicWow() or IsTBCWow() or IsWrathWow() then
+    if (IsRetailWow() and tocversion <= 100000) or IsClassicWow() or IsTBCWow() or IsWrathWow() then
         self:ScanUnit("Grid_UnitJoined", unitid, guid)
     end
 end
 
 function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in PlexusRoster:IterateRoster() do
-        if IsRetailWow() then
+        if IsRetailWow() and tocversion >= 100000 then
 	        local unitauraInfo = {}
 	        ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
 	        self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
@@ -574,7 +576,7 @@ function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 
         if (IsClassicWow() and LibClassicDurations) then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
-        if IsTBCWow() or IsWrathWow() then
+        if IsRetailWow() or IsTBCWow() or IsWrathWow() then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
         if (IsClassicWow() and not LibClassicDurations) then
