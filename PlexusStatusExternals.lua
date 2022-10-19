@@ -456,8 +456,8 @@ function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
 end
 
 function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
-    if IsRetailWow() and tocversion >= 100000 then
-        local unitauraInfo = {}
+    if IsRetailWow() and tocversion >= 100000 and unitid then
+	local unitauraInfo = {}
         ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
         self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
     end
