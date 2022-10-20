@@ -307,7 +307,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             --1022,    -- Blessing of Protection
             --204018,  -- Blessing of Spellwarding
             --465,     -- Devotion Aura
-	    },
+        },
         inactive_spellids = { -- used to remember priority of disabled spells
         }
     }
@@ -438,10 +438,10 @@ end
 function PlexusStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
     if status == "alert_externals" then
         if IsRetailWow() and tocversion >= 100000 then
-	        self:RegisterEvent("UNIT_AURA", "ScanUnitByAuraInfo")
-	    else
-	        self:RegisterEvent("UNIT_AURA", "ScanUnit")
-	    end
+            self:RegisterEvent("UNIT_AURA", "ScanUnitByAuraInfo")
+        else
+            self:RegisterEvent("UNIT_AURA", "ScanUnit")
+        end
         self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
         self:UpdateAllUnits()
     end
@@ -469,12 +469,12 @@ end
 function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in PlexusRoster:IterateRoster() do
         if IsRetailWow() and tocversion >= 100000 then
-	        local unitauraInfo = {}
-	        ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
-	        self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
-	    else
+            local unitauraInfo = {}
+            ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+            self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
+        else
             self:ScanUnit("UpdateAllUnits", unitid, guid)
-	    end
+        end
     end
     self:UpdateAuraScanList()
 end
@@ -490,43 +490,43 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unitid, updatedAuras, unitg
     end
 
     if updatedAuras.isFullUpdate then
-	    for guid, unit in PlexusRoster:IterateRoster() do
-	        local unitauraInfo = {}
-	        ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
-	        if unitauraInfo.auraInstanceID then
-	            UnitAuraInstanceID[unit][unitauraInfo.auraInstanceID] = true
-	        end
-	    end
+        for guid, unit in PlexusRoster:IterateRoster() do
+            local unitauraInfo = {}
+            ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+            if unitauraInfo.auraInstanceID then
+                UnitAuraInstanceID[unit][unitauraInfo.auraInstanceID] = true
+            end
+        end
     else
-	    if updatedAuras.addedAuras then
-	        for _, addedAuraInfo in pairs(updatedAuras.addedAuras) do
-	    	    UnitAuraInstanceID[unitid][addedAuraInfo.auraInstanceID] = true
-	        end
-	    end
-	    if updatedAuras.updatedAuraInstanceIDs then
-	        for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
-	            local updatedAuraInfo = {}
-	            updatedAuraInfo[auraInstanceID] = GetAuraDataByAuraInstanceID(unitid, auraInstanceID)
-	            if updatedAuraInfo then
-	    	        UnitAuraInstanceID[unitid][auraInstanceID] = true
-	            end
-	        end
-	    end
-	    if updatedAuras.removedAuraInstanceIDs then
-	        for _, auraInstanceID in ipairs(updatedAuras.removedAuraInstanceIDs) do
-	            UnitAuraInstanceID[unitid][auraInstanceID] = nil
-	        end
-	    end
+        if updatedAuras.addedAuras then
+            for _, addedAuraInfo in pairs(updatedAuras.addedAuras) do
+                UnitAuraInstanceID[unitid][addedAuraInfo.auraInstanceID] = true
+            end
+        end
+        if updatedAuras.updatedAuraInstanceIDs then
+            for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
+                local updatedAuraInfo = {}
+                updatedAuraInfo[auraInstanceID] = GetAuraDataByAuraInstanceID(unitid, auraInstanceID)
+                if updatedAuraInfo then
+                    UnitAuraInstanceID[unitid][auraInstanceID] = true
+                end
+            end
+        end
+        if updatedAuras.removedAuraInstanceIDs then
+            for _, auraInstanceID in ipairs(updatedAuras.removedAuraInstanceIDs) do
+                UnitAuraInstanceID[unitid][auraInstanceID] = nil
+            end
+        end
     end
 
     if UnitExists(unitid) and UnitAuraInstanceID[unitid] then
-	    local aurainstanceinfo = {}
-	    for instanceID in pairs(UnitAuraInstanceID[unitid]) do
-	        aurainstanceinfo = GetAuraDataByAuraInstanceID(unitid, instanceID)
-	        local name, uicon, count, duration, expirationTime, caster, spellId = aurainstanceinfo.name, aurainstanceinfo.icon, aurainstanceinfo.charges, aurainstanceinfo.duration, aurainstanceinfo.expirationTime, aurainstanceinfo.sourceUnit, aurainstanceinfo.spellId
+        local aurainstanceinfo = {}
+        for instanceID in pairs(UnitAuraInstanceID[unitid]) do
+            aurainstanceinfo = GetAuraDataByAuraInstanceID(unitid, instanceID)
+            local name, uicon, count, duration, expirationTime, caster, spellId = aurainstanceinfo.name, aurainstanceinfo.icon, aurainstanceinfo.charges, aurainstanceinfo.duration, aurainstanceinfo.expirationTime, aurainstanceinfo.sourceUnit, aurainstanceinfo.spellId
 
             if spellid_list[spellId] then
-	    	    local text
+                local text
                 if settings.showtextas == "caster" then
                     if caster then
                         text = UnitName(caster)
@@ -535,7 +535,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unitid, updatedAuras, unitg
                     text = name
                 end
 
-	            self.core:SendStatusGained(unitguid,
+                self.core:SendStatusGained(unitguid,
                     "alert_externals",
                     settings.priority,
                     (settings.range and 40),
@@ -548,8 +548,8 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unitid, updatedAuras, unitg
                     duration,					-- duration
                     count)						-- stack
                 return
-	        end
-	    end
+            end
+        end
     end
 
     self.core:SendStatusLost(unitguid, "alert_externals")
