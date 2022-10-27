@@ -441,8 +441,8 @@ function PlexusStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
             self:RegisterEvent("UNIT_AURA", "ScanUnitByAuraInfo")
         else
             self:RegisterEvent("UNIT_AURA", "ScanUnit")
+            self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
         end
-        self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
         self:UpdateAllUnits()
     end
 end
@@ -456,11 +456,6 @@ function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
 end
 
 function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
-    if IsRetailWow() and tocversion >= 100000 then
-        local unitauraInfo = {}
-        ForEachAura(unitid, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end, true)
-	self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
-    end
     if (IsRetailWow() and tocversion <= 100000) or IsClassicWow() or IsTBCWow() or IsWrathWow() then
         self:ScanUnit("Grid_UnitJoined", unitid, guid)
     end
@@ -470,7 +465,7 @@ function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in PlexusRoster:IterateRoster() do
         if IsRetailWow() and tocversion >= 100000 then
             local unitauraInfo = {}
-            ForEachAura(unitid, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end, true)
+            ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end)
             self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
         else
             self:ScanUnit("UpdateAllUnits", unitid, guid)
