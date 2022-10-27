@@ -441,8 +441,8 @@ function PlexusStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
             self:RegisterEvent("UNIT_AURA", "ScanUnitByAuraInfo")
         else
             self:RegisterEvent("UNIT_AURA", "ScanUnit")
+            self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
         end
-        self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
         self:UpdateAllUnits()
     end
 end
@@ -456,11 +456,6 @@ function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
 end
 
 function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
-    if IsRetailWow() and tocversion >= 100000 then
-        local unitauraInfo = {}
-        ForEachAura(unitid, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
-        self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
-    end
     if (IsRetailWow() and tocversion <= 100000) or IsClassicWow() or IsTBCWow() or IsWrathWow() then
         self:ScanUnit("Grid_UnitJoined", unitid, guid)
     end
@@ -470,7 +465,7 @@ function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in PlexusRoster:IterateRoster() do
         if IsRetailWow() and tocversion >= 100000 then
             local unitauraInfo = {}
-            ForEachAura(unitid, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
+            ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
             self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
         else
             self:ScanUnit("UpdateAllUnits", unitid, guid)
@@ -492,7 +487,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unitid, updatedAuras, unitg
     if updatedAuras.isFullUpdate then
         for guid, unit in PlexusRoster:IterateRoster() do
             local unitauraInfo = {}
-            ForEachAura(unit, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
+            ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
             if unitauraInfo.auraInstanceID then
                 UnitAuraInstanceID[unit][unitauraInfo.auraInstanceID] = true
             end
@@ -523,31 +518,33 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unitid, updatedAuras, unitg
         local aurainstanceinfo = {}
         for instanceID in pairs(UnitAuraInstanceID[unitid]) do
             aurainstanceinfo = GetAuraDataByAuraInstanceID(unitid, instanceID)
-            local name, uicon, count, duration, expirationTime, caster, spellId = aurainstanceinfo.name, aurainstanceinfo.icon, aurainstanceinfo.charges, aurainstanceinfo.duration, aurainstanceinfo.expirationTime, aurainstanceinfo.sourceUnit, aurainstanceinfo.spellId
+            if aurainstanceinfo then
+                local name, uicon, count, duration, expirationTime, caster, spellId = aurainstanceinfo.name, aurainstanceinfo.icon, aurainstanceinfo.charges, aurainstanceinfo.duration, aurainstanceinfo.expirationTime, aurainstanceinfo.sourceUnit, aurainstanceinfo.spellId
 
-            if spellid_list[spellId] then
-                local text
-                if settings.showtextas == "caster" then
-                    if caster then
-                        text = UnitName(caster)
+                if spellid_list[spellId] then
+                    local text
+                    if settings.showtextas == "caster" then
+                        if caster then
+                            text = UnitName(caster)
+                        end
+                    else
+                        text = name
                     end
-                else
-                    text = name
-                end
 
-                self.core:SendStatusGained(unitguid,
-                    "alert_externals",
-                    settings.priority,
-                    (settings.range and 40),
-                    settings.color,
-                    text,
-                    0,							-- value
-                    nil,						-- maxValue
-                    uicon,						-- icon
-                    expirationTime - duration,	-- start
-                    duration,					-- duration
-                    count)						-- stack
-                return
+                    self.core:SendStatusGained(unitguid,
+                        "alert_externals",
+                        settings.priority,
+                        (settings.range and 40),
+                        settings.color,
+                        text,
+                        0,							-- value
+                        nil,						-- maxValue
+                        uicon,						-- icon
+                        expirationTime - duration,	-- start
+                        duration,					-- duration
+                        count)						-- stack
+                    return
+                end
             end
         end
     end
