@@ -458,7 +458,9 @@ end
 function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
     if IsRetailWow() and tocversion >= 100000 then
         local unitauraInfo = {}
-        ForEachAura(unitid, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
+        --TODO    52x Interface/FrameXML/AuraUtil.lua:65: Usage: local continuationToken, slot1, slot2, ... = UnitAuraSlots("unit" [, "filter"][, maxSlots][, continuationToken])
+        --        [string "=[C]"]: in function `UnitAuraSlots'
+        --ForEachAura(unitid, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
         self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
     end
     if (IsRetailWow() and tocversion <= 100000) or IsClassicWow() or IsTBCWow() or IsWrathWow() then
@@ -481,10 +483,11 @@ end
 
 function PlexusStatusExternals:ScanUnitByAuraInfo(_, unitid, updatedAuras, unitguid)
     if not unitguid then unitguid = UnitGUID(unitid) end
-    if not PlexusRoster:IsGUIDInRaid(unitguid) then
-        return
-    end
+    --if not PlexusRoster:IsGUIDInRaid(unitguid) then
+    --    return
+    --end
 
+    if not unitid then return end
     if not UnitAuraInstanceID[unitid] then
         UnitAuraInstanceID[unitid] = {}
     end
@@ -523,6 +526,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unitid, updatedAuras, unitg
         local aurainstanceinfo = {}
         for instanceID in pairs(UnitAuraInstanceID[unitid]) do
             aurainstanceinfo = GetAuraDataByAuraInstanceID(unitid, instanceID)
+            if not aurainstanceinfo then return end
             local name, uicon, count, duration, expirationTime, caster, spellId = aurainstanceinfo.name, aurainstanceinfo.icon, aurainstanceinfo.charges, aurainstanceinfo.duration, aurainstanceinfo.expirationTime, aurainstanceinfo.sourceUnit, aurainstanceinfo.spellId
 
             if spellid_list[spellId] then
