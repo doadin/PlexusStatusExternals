@@ -540,37 +540,39 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unitid, unitAuraUpdateI
         end
     end
 
-    for instanceID in pairs(self.unitAuras[unitid]) do
-        local aura = self.unitAuras[unitid][instanceID]
-        if aura and spellid_list[aura.spellId] then
-            local name, uicon, count, duration, expirationTime, caster, spellId = aura.name, aura.icon, aura.applications, aura.duration, aura.expirationTime, aura.sourceUnit, aura.spellId
+    if self.unitAuras[unitid] then
+        for instanceID in pairs(self.unitAuras[unitid]) do
+            local aura = self.unitAuras[unitid][instanceID]
+            if aura and spellid_list[aura.spellId] then
+                local name, uicon, count, duration, expirationTime, caster, spellId = aura.name, aura.icon, aura.applications, aura.duration, aura.expirationTime, aura.sourceUnit, aura.spellId
 
-            local text
-            if settings.showtextas == "caster" then
-                if caster then
-                    text = UnitName(caster)
-                end
-            else
-                if not name then
-                    break
+                local text
+                if settings.showtextas == "caster" then
+                    if caster then
+                        text = UnitName(caster)
+                    end
                 else
-                    text = name
+                    if not name then
+                        break
+                    else
+                        text = name
+                    end
                 end
-            end
 
-            self.core:SendStatusGained(unitguid,
-                "alert_externals",
-                settings.priority,
-                (settings.range and 40),
-                settings.color,
-                text,
-                0,							-- value
-                nil,						-- maxValue
-                uicon,						-- icon
-                expirationTime - duration,	-- start
-                duration,					-- duration
-                count                       -- stack
-            )
+                self.core:SendStatusGained(unitguid,
+                    "alert_externals",
+                    settings.priority,
+                    (settings.range and 40),
+                    settings.color,
+                    text,
+                    0,							-- value
+                    nil,						-- maxValue
+                    uicon,						-- icon
+                    expirationTime - duration,	-- start
+                    duration,					-- duration
+                    count                       -- stack
+                )
+            end
         end
     end
 end
