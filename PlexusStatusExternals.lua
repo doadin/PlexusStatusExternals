@@ -123,7 +123,7 @@ tankingbuffs = {
 }
 end
 
-local tocversion = select(4, GetBuildInfo())
+local version, build, date, tocversion = GetBuildInfo()
 if tocversion >= 100000 then
     tankingbuffs["EVOKER"] = {
         357170, -- Time Dilation
@@ -222,7 +222,6 @@ local GetAuraDataByAuraInstanceID
 local ForEachAura
 if tocversion >= 100000 then
     if IsRetailWow() then
-        PlexusStatusExternals.unitAuras = {}
         GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
         ForEachAura = AuraUtil.ForEachAura
     end
@@ -231,6 +230,7 @@ end
 local settings
 local spellnames = {} --luacheck: ignore 241
 local spellid_list = {}
+local UnitAuraInstanceID = {}
 
 if IsRetailWow() then
 PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
@@ -428,9 +428,6 @@ function PlexusStatusExternals:OnInitialize() --luacheck: ignore 112
 end
 
 function PlexusStatusExternals:UpdateAuraScanList() --luacheck: ignore 212 112
-    if settings.active_spellids == nil then
-        return
-    end
     spellid_list = {}
 
     for _, spellid in ipairs(settings.active_spellids) do
@@ -459,10 +456,7 @@ function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
 end
 
 function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
-    if IsRetailWow() and tocversion >= 100000 then
-        self:ScanUnitByAuraInfo(_, unitid, "UpdateUnitAura", guid)
-    end
-    if (IsRetailWow() and tocversion < 100000) or IsClassicWow() or IsTBCWow() or IsWrathWow() then
+    if (IsRetailWow() and tocversion <= 100000) or IsClassicWow() or IsTBCWow() or IsWrathWow() then
         self:ScanUnit("Grid_UnitJoined", unitid, guid)
     end
 end
@@ -470,7 +464,9 @@ end
 function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in PlexusRoster:IterateRoster() do
         if IsRetailWow() and tocversion >= 100000 then
-            self:ScanUnitByAuraInfo(_, unitid, "UpdateUnitAura", guid)
+            local unitauraInfo = {}
+            ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+            self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, unitauraInfo, guid)
         else
             self:ScanUnit("UpdateAllUnits", unitid, guid)
         end
@@ -478,105 +474,82 @@ function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     self:UpdateAuraScanList()
 end
 
-function PlexusStatusExternals:ScanUnitByAuraInfo(event, unitid, unitAuraUpdateInfo, unitguid)
+function PlexusStatusExternals:ScanUnitByAuraInfo(_, unitid, updatedAuras, unitguid)
     if not unitguid then unitguid = UnitGUID(unitid) end
     if not PlexusRoster:IsGUIDInRaid(unitguid) then
         return
     end
 
-    if unitAuraUpdateInfo.isFullUpdate or unitAuraUpdateInfo == "UpdateUnitAura" then
-        if unitAuraUpdateInfo.isFullUpdate and self.unitAuras[unitid] then
-            wipe(self.unitAuras[unitid])
-        end
-        if not self.unitAuras[unitid] then
-            self.unitAuras[unitid] = {}
-        end
-        local unitauraInfo = {}
-        ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
-
-        for _, v in pairs(unitauraInfo) do
-            if spellid_list[v.spellId] then
-                self.unitAuras[unitid][v.auraInstanceID] = v
-            end
-        end
+    if not UnitAuraInstanceID[unitid] then
+        UnitAuraInstanceID[unitid] = {}
     end
 
-    if unitAuraUpdateInfo.addedAuras then
-        if not self.unitAuras[unitid] then
-            self.unitAuras[unitid] = {}
-        end
-
-        for _, aura in pairs(unitAuraUpdateInfo.addedAuras) do
-            if aura and spellid_list[aura.spellId] then
-                self.unitAuras[unitid][aura.auraInstanceID] = aura
-            end
-       end
-    end
-
-    if unitAuraUpdateInfo.updatedAuraInstanceIDs then
-        if not self.unitAuras[unitid] then
-            self.unitAuras[unitid] = {} -- Plugins always get updateAuraInstanceIDs arg at first when you UI reloaded
-        end
-        for _, auraInstanceID in ipairs(unitAuraUpdateInfo.updatedAuraInstanceIDs) do
-            local newAura = GetAuraDataByAuraInstanceID(unitid, auraInstanceID)
-            if newAura and spellid_list[newAura.spellId] and auraInstanceID and not self.unitAuras[unitid][auraInstanceID] then
-                self.unitAuras[unitid][auraInstanceID] = {}
-                self.unitAuras[unitid][auraInstanceID] = newAura
-            elseif newAura and spellid_list[newAura.spellId] and auraInstanceID and self.unitAuras[unitid][auraInstanceID] then
-                self.unitAuras[unitid][auraInstanceID] = newAura
+    if updatedAuras.isFullUpdate then
+        for guid, unit in PlexusRoster:IterateRoster() do
+            local unitauraInfo = {}
+            ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+            if unitauraInfo.auraInstanceID then
+                UnitAuraInstanceID[unit][unitauraInfo.auraInstanceID] = true
             end
         end
-    end
-
-    if unitAuraUpdateInfo.removedAuraInstanceIDs then
-        for _, auraInstanceID in ipairs(unitAuraUpdateInfo.removedAuraInstanceIDs) do
-            if self.unitAuras[unitid] then
-                if auraInstanceID and self.unitAuras[unitid][auraInstanceID] then
-                    local aura = self.unitAuras[unitid][auraInstanceID]
-                    if aura and spellid_list[aura.spellId] then
-                        self.core:SendStatusLost(unitguid, "alert_externals")
-                        self.unitAuras[unitid][auraInstanceID] = nil
-                    end
+    else
+        if updatedAuras.addedAuras then
+            for _, addedAuraInfo in pairs(updatedAuras.addedAuras) do
+                UnitAuraInstanceID[unitid][addedAuraInfo.auraInstanceID] = true
+            end
+        end
+        if updatedAuras.updatedAuraInstanceIDs then
+            for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
+                local updatedAuraInfo = {}
+                updatedAuraInfo[auraInstanceID] = GetAuraDataByAuraInstanceID(unitid, auraInstanceID)
+                if updatedAuraInfo then
+                    UnitAuraInstanceID[unitid][auraInstanceID] = true
                 end
             end
         end
+        if updatedAuras.removedAuraInstanceIDs then
+            for _, auraInstanceID in ipairs(updatedAuras.removedAuraInstanceIDs) do
+                UnitAuraInstanceID[unitid][auraInstanceID] = nil
+            end
+        end
     end
 
-    if self.unitAuras[unitid] then
-        for instanceID in pairs(self.unitAuras[unitid]) do
-            local aura = self.unitAuras[unitid][instanceID]
-            if aura and spellid_list[aura.spellId] then
-                local name, uicon, count, duration, expirationTime, caster, spellId = aura.name, aura.icon, aura.applications, aura.duration, aura.expirationTime, aura.sourceUnit, aura.spellId
+    if UnitExists(unitid) and UnitAuraInstanceID[unitid] then
+        local aurainstanceinfo = {}
+        for instanceID in pairs(UnitAuraInstanceID[unitid]) do
+            aurainstanceinfo = GetAuraDataByAuraInstanceID(unitid, instanceID)
+            if aurainstanceinfo then
+                local name, uicon, count, duration, expirationTime, caster, spellId = aurainstanceinfo.name, aurainstanceinfo.icon, aurainstanceinfo.charges, aurainstanceinfo.duration, aurainstanceinfo.expirationTime, aurainstanceinfo.sourceUnit, aurainstanceinfo.spellId
 
-                local text
-                if settings.showtextas == "caster" then
-                    if caster then
-                        text = UnitName(caster)
-                    end
-                else
-                    if not name then
-                        break
+                if spellid_list[spellId] then
+                    local text
+                    if settings.showtextas == "caster" then
+                        if caster then
+                            text = UnitName(caster)
+                        end
                     else
                         text = name
                     end
-                end
 
-                self.core:SendStatusGained(unitguid,
-                    "alert_externals",
-                    settings.priority,
-                    (settings.range and 40),
-                    settings.color,
-                    text,
-                    0,							-- value
-                    nil,						-- maxValue
-                    uicon,						-- icon
-                    expirationTime - duration,	-- start
-                    duration,					-- duration
-                    count                       -- stack
-                )
+                    self.core:SendStatusGained(unitguid,
+                        "alert_externals",
+                        settings.priority,
+                        (settings.range and 40),
+                        settings.color,
+                        text,
+                        0,							-- value
+                        nil,						-- maxValue
+                        uicon,						-- icon
+                        expirationTime - duration,	-- start
+                        duration,					-- duration
+                        count)						-- stack
+                    return
+                end
             end
         end
     end
+
+    self.core:SendStatusLost(unitguid, "alert_externals")
 end
 
 function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 112
