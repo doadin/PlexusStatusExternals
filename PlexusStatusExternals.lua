@@ -216,13 +216,10 @@ local UnitBuff = UnitBuff
 local UnitGUID = UnitGUID
 local GetAuraDataByAuraInstanceID
 local ForEachAura
-local tocversion = select(4, GetBuildInfo())
-if tocversion >= 100000 then
-    if IsRetailWow() then
-        PlexusStatusExternals.unitAuras = {}
-        GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
-        ForEachAura = AuraUtil.ForEachAura
-    end
+if IsRetailWow() then
+    PlexusStatusExternals.unitAuras = {}
+    GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
+    ForEachAura = AuraUtil.ForEachAura
 end
 
 local settings
@@ -437,18 +434,22 @@ end
 
 function PlexusStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
     if status == "alert_externals" then
-        if IsRetailWow() and tocversion >= 100000 then
+        if IsRetailWow() then
             self:RegisterEvent("UNIT_AURA", "ScanUnitByAuraInfo")
+            self:RegisterEvent("PLAYER_ENTERING_WORLD", "InitAuras")
         else
             self:RegisterEvent("UNIT_AURA", "ScanUnit")
-            self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
         end
+        self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
         self:UpdateAllUnits()
     end
 end
 
 function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
     if status == "alert_externals" then
+        if IsRetailWow() then
+            self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+        end
         self:UnregisterEvent("UNIT_AURA")
         self:UnregisterEvent("GROUP_ROSTER_UPDATE")
         self.core:SendStatusLostAllUnits("alert_externals")
@@ -456,23 +457,32 @@ function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
 end
 
 function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
-    if IsRetailWow() and tocversion >= 100000 then
+    if IsRetailWow() then
         self:ScanUnitByAuraInfo(_, unitid, "UpdateUnitAura", guid)
     end
-    if (IsRetailWow() and tocversion < 100000) or IsClassicWow() or IsTBCWow() or IsWrathWow() then
+    if IsRetailWow() or IsClassicWow() or IsTBCWow() or IsWrathWow() then
         self:ScanUnit("Grid_UnitJoined", unitid, guid)
     end
 end
 
 function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in PlexusRoster:IterateRoster() do
-        if IsRetailWow() and tocversion >= 100000 then
+        if IsRetailWow() then
             self:ScanUnitByAuraInfo(_, unitid, "UpdateUnitAura", guid)
         else
             self:ScanUnit("UpdateAllUnits", unitid, guid)
         end
     end
     self:UpdateAuraScanList()
+end
+
+function PlexusStatusExternals:InitAuras(event, isLogin, isReload)
+    if not isLogin and not isReload then
+        self.core:SendStatusLostAllUnits("alert_externals")
+        for guid, unitid in PlexusRoster:IterateRoster() do
+            self:ScanUnitByAuraInfo(_, unitid, "UpdateUnitAura", guid)
+        end
+    end
 end
 
 function PlexusStatusExternals:ScanUnitByAuraInfo(_, unitid, unitAuraUpdateInfo, unitguid)
