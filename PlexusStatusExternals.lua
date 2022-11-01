@@ -454,7 +454,7 @@ end
 
 function PlexusStatusExternals:Grid_UnitJoined(guid, unitid) --luacheck: ignore 112
     if IsRetailWow() then
-        self:ScanUnitByAuraInfo(_, unitid, "UpdateUnitAura", guid)
+        self:ScanUnitByAuraInfo(_, unitid, "UpdateUnitAura")
     end
     if IsRetailWow() or IsClassicWow() or IsTBCWow() or IsWrathWow() then
         self:ScanUnit("Grid_UnitJoined", unitid, guid)
