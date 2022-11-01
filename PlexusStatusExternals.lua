@@ -549,7 +549,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
             local aura = unitAuras[unit][instanceID]
             if not aura then return end
             if spellid_list[aura.spellId] then
-                local name, uicon, count, duration, expirationTime, caster, spellId = aura.name, aura.icon, aura.applications, aura.duration, aura.expirationTime, aura.sourceUnit, aura.spellId
+                local name, uicon, count, duration, expirationTime, caster = aura.name, aura.icon, aura.applications, aura.duration, aura.expirationTime, aura.sourceUnit
 
                 local text
                 if settings.showtextas == "caster" and caster then
