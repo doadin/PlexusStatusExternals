@@ -439,7 +439,7 @@ function PlexusStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
         else
             self:RegisterEvent("UNIT_AURA", "ScanUnit")
         end
-        self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
+        self:RegisterMessage("Plexus_UnitJoined")
         self:UpdateAllUnits()
     end
 end
@@ -447,19 +447,17 @@ end
 function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
     if status == "alert_externals" then
         self:UnregisterEvent("UNIT_AURA")
-        self:UnregisterEvent("GROUP_ROSTER_UPDATE")
+        self:UnregisterMessage("Plexus_UnitJoined")
         self.core:SendStatusLostAllUnits("alert_externals")
     end
 end
 
-function PlexusStatusExternals:Grid_UnitJoined(event, guid, unitid) --luacheck: ignore 112
-    --[[
+function PlexusStatusExternals:Plexus_UnitJoined(_, guid, unitid) --luacheck: ignore 112
     if IsRetailWow() then
-        self:ScanUnitByAuraInfo(_, unitid, true) -- doesn't have any arguments but event name in the first arg
+        self:ScanUnitByAuraInfo(_, unitid, true)
     end
-    ]]
     if IsClassicWow() or IsTBCWow() or IsWrathWow() then
-        self:ScanUnit("Grid_UnitJoined", unitid, guid)
+        self:ScanUnit("Plexus_UnitJoined", unitid, guid)
     end
 end
 
@@ -500,7 +498,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
                 unitAuras[unit][v.auraInstanceID] = v
                 if not v.sourceUnit then
                     local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, v.auraInstanceID)
-                    v.sourceUnit = UnitAuraInfo.sourceUnit
+                    v.sourceUnit = UnitAuraInfo and UnitAuraInfo.sourceUnit
                 end
             end
         end
@@ -511,7 +509,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
             if spellid_list[aura.spellId] then
                 if not aura.sourceUnit then
                     local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, aura.auraInstanceID)
-                    if UnitAuraInfo.sourceUnit then
+                    if UnitAuraInfo and UnitAuraInfo.sourceUnit then
                         aura.sourceUnit = UnitAuraInfo.sourceUnit
                     end
                 end
@@ -526,7 +524,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
                 local sourceUnit = unitAuras[unit][auraInstanceID].sourceUnit and unitAuras[unit][auraInstanceID].sourceUnit
                 local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
                 if spellid_list[auraTable.spellId] then
-                    if auraTable and not sourceUnit then
+                    if auraTable and auraTable.sourceUnit and not sourceUnit then
                         auraTable.sourceUnit = sourceUnit
                     end
                     unitAuras[unit][auraInstanceID] = auraTable
@@ -597,7 +595,7 @@ function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 
         if (IsClassicWow() and LibClassicDurations) then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
-        if IsTBCWow() or IsWrathWow() then
+        if IsRetailWow() or IsTBCWow() or IsWrathWow() then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
         if (IsClassicWow() and not LibClassicDurations) then
