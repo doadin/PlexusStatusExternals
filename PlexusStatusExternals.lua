@@ -439,7 +439,7 @@ function PlexusStatusExternals:OnStatusEnable(status) --luacheck: ignore 112
         else
             self:RegisterEvent("UNIT_AURA", "ScanUnit")
         end
-        self:RegisterEvent("GROUP_ROSTER_UPDATE", "Grid_UnitJoined")
+        self:RegisterMessage("Plexus_UnitJoined")
         self:UpdateAllUnits()
     end
 end
@@ -447,17 +447,17 @@ end
 function PlexusStatusExternals:OnStatusDisable(status) --luacheck: ignore 112
     if status == "alert_externals" then
         self:UnregisterEvent("UNIT_AURA")
-        self:UnregisterEvent("GROUP_ROSTER_UPDATE")
+        self:UnregisterMessage("Plexus_UnitJoined")
         self.core:SendStatusLostAllUnits("alert_externals")
     end
 end
 
-function PlexusStatusExternals:Grid_UnitJoined(_, guid, unitid) --luacheck: ignore 112
+function PlexusStatusExternals:Plexus_UnitJoined(_, guid, unitid) --luacheck: ignore 112
     if IsRetailWow() then
         self:ScanUnitByAuraInfo(_, unitid, true)
     end
     if IsClassicWow() or IsTBCWow() or IsWrathWow() then
-        self:ScanUnit("Grid_UnitJoined", unitid, guid)
+        self:ScanUnit("Plexus_UnitJoined", unitid, guid)
     end
 end
 
