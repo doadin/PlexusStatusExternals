@@ -496,10 +496,6 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
         for _, v in pairs(unitauraInfo) do
             if spellid_list[v.spellId] then
                 unitAuras[unit][v.auraInstanceID] = v
-                if not v.sourceUnit then
-                    local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, v.auraInstanceID)
-                    v.sourceUnit = UnitAuraInfo and UnitAuraInfo.sourceUnit
-                end
             end
         end
     end
@@ -507,12 +503,6 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
     if type(updatedAuras) == "table" and updatedAuras.addedAuras then
         for _, aura in pairs(updatedAuras.addedAuras) do
             if spellid_list[aura.spellId] then
-                if not aura.sourceUnit then
-                    local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, aura.auraInstanceID)
-                    if UnitAuraInfo and UnitAuraInfo.sourceUnit then
-                        aura.sourceUnit = UnitAuraInfo.sourceUnit
-                    end
-                end
                 unitAuras[unit][aura.auraInstanceID] = aura
             end
         end
@@ -520,14 +510,18 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
 
     if type(updatedAuras) == "table" and updatedAuras.updatedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
-            if unitAuras[unit][auraInstanceID] then
-                local sourceUnit = unitAuras[unit][auraInstanceID].sourceUnit and unitAuras[unit][auraInstanceID].sourceUnit
-                local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-                if auraTable and auraTable.spellId and spellid_list[auraTable.spellId] then
-                    if auraTable and auraTable.sourceUnit and not sourceUnit then
-                        auraTable.sourceUnit = sourceUnit
-                    end
-                    unitAuras[unit][auraInstanceID] = auraTable
+            local oldAura = unitAuras[unit][auraInstanceID]
+            if oldAura then
+                local newAura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+                if newAura and spellid_list[newAura.spellId] then
+                    unitAuras[unit][auraInstanceID] = newAura
+                else
+                    unitAuras[unit][auraInstanceID] = nil
+                end
+            else
+                local aura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+                if aura and spellid_list[aura.spellId] then
+                    unitAuras[unit][auraInstanceID] = aura
                 end
             end
         end
