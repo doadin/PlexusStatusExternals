@@ -454,7 +454,7 @@ end
 
 function PlexusStatusExternals:Plexus_UnitJoined(_, guid, unitid) --luacheck: ignore 112
     if IsRetailWow() then
-        self:ScanUnitByAuraInfo(_, unitid, true)
+        self:ScanUnitByAuraInfo(_, unitid, {isFullUpdate = true})
     end
     if IsClassicWow() or IsTBCWow() or IsWrathWow() then
         self:ScanUnit("Plexus_UnitJoined", unitid, guid)
@@ -464,7 +464,7 @@ end
 function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in PlexusRoster:IterateRoster() do
         if IsRetailWow() then
-            self:ScanUnitByAuraInfo(_, unitid, true)
+            self:ScanUnitByAuraInfo(_, unitid, {isFullUpdate = true})
         else
             self:ScanUnit("UpdateAllUnits", unitid, guid)
         end
@@ -487,7 +487,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
     end
 
     -- Full Update
-    if type(updatedAuras) == "boolean" and updatedAuras == true or (updatedAuras and updatedAuras.isFullUpdate) then
+    if (updatedAuras and updatedAuras.isFullUpdate) or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
         local unitauraInfo = {}
         ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
 
