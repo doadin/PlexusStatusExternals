@@ -521,7 +521,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
     if type(updatedAuras) == "table" and updatedAuras.updatedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
             local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-            local sourceUnit = unitAuras[unit][auraInstanceID].sourceUnit and unitAuras[unit][auraInstanceID].sourceUnit
+            local sourceUnit = unitAuras[unit][auraInstanceID] and unitAuras[unit][auraInstanceID].sourceUnit and unitAuras[unit][auraInstanceID].sourceUnit
             if auraTable and auraTable.spellId and spellid_list[auraTable.spellId] then
                 unitAuras[unit][auraInstanceID] = auraTable
                 if not auraTable.sourceUnit and sourceUnit then
