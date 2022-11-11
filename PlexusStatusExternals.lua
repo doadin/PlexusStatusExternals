@@ -475,6 +475,10 @@ end
 local unitAuras
 function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
     if not unit then return end
+    --if unit == "nameplate1" then return end
+    if UnitName(unit) == UnitName("player") and unit ~= "player" then
+        return
+    end
     local unitguid = UnitGUID(unit)
     if not unitAuras then
         unitAuras = {}
