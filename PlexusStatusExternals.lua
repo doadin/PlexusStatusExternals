@@ -491,7 +491,6 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unit, updatedAuras)
         local unitauraInfo = {}
         ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
 
-        self.core:SendStatusLost(unitguid, "alert_externals")
         unitAuras[unit] = {}
         for _, v in pairs(unitauraInfo) do
             if spellid_list[v.spellId] then
@@ -515,8 +514,6 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unit, updatedAuras)
                 local newAura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
                 if newAura and spellid_list[newAura.spellId] then
                     unitAuras[unit][auraInstanceID] = newAura
-                else
-                    unitAuras[unit][auraInstanceID] = nil
                 end
             else
                 local aura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
@@ -530,7 +527,6 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unit, updatedAuras)
     if type(updatedAuras) == "table" and updatedAuras.removedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updatedAuras.removedAuraInstanceIDs) do
             if unitAuras[unit][auraInstanceID] then
-                self.core:SendStatusLost(unitguid, "alert_externals")
                 unitAuras[unit][auraInstanceID] = nil
             end
         end
@@ -564,8 +560,11 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_, unit, updatedAuras)
                     count                       -- stack
                 )
             end
+            return
         end
     end
+
+    self.core:SendStatusLost(unitguid, "alert_externals")
 end
 
 function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 112
