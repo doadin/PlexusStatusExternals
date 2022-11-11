@@ -494,25 +494,15 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
         self.core:SendStatusLost(unitguid, "alert_externals")
         unitAuras[unit] = {}
         for _, v in pairs(unitauraInfo) do
-            if spellid_list[v.spellId] then
+            if v.spellId and spellid_list[v.spellId] then
                 unitAuras[unit][v.auraInstanceID] = v
-                if not v.sourceUnit then
-                    local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, v.auraInstanceID)
-                    v.sourceUnit = UnitAuraInfo and UnitAuraInfo.sourceUnit
-                end
             end
         end
     end
 
     if updatedAuras and updatedAuras.addedAuras then
         for _, aura in pairs(updatedAuras.addedAuras) do
-            if spellid_list[aura.spellId] then
-                if not aura.sourceUnit then
-                    local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, aura.auraInstanceID)
-                    if UnitAuraInfo and UnitAuraInfo.sourceUnit then
-                        aura.sourceUnit = UnitAuraInfo.sourceUnit
-                    end
-                end
+            if aura.spellId and spellid_list[aura.spellId] then
                 unitAuras[unit][aura.auraInstanceID] = aura
             end
         end
@@ -521,12 +511,8 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
     if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
             local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-            local sourceUnit = unitAuras[unit][auraInstanceID] and unitAuras[unit][auraInstanceID].sourceUnit and unitAuras[unit][auraInstanceID].sourceUnit
             if auraTable and auraTable.spellId and spellid_list[auraTable.spellId] then
                 unitAuras[unit][auraInstanceID] = auraTable
-                if not auraTable.sourceUnit and sourceUnit then
-                    unitAuras[unit][auraInstanceID].sourceUnit = sourceUnit
-                end
             end
         end
     end
@@ -534,7 +520,6 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
     if updatedAuras and updatedAuras.removedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updatedAuras.removedAuraInstanceIDs) do
             if unitAuras[unit][auraInstanceID] then
-                self.core:SendStatusLost(unitguid, "alert_externals")
                 unitAuras[unit][auraInstanceID] = nil
             end
         end
@@ -569,6 +554,13 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
                 )
             end
         end
+    end
+    local numAuras = 0
+    for _ in pairs(unitAuras[unit]) do
+        numAuras = numAuras + 1
+    end
+    if numAuras == 0 then
+        self.core:SendStatusLost(unitguid, "alert_externals")
     end
 end
 
