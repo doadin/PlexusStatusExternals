@@ -11,6 +11,8 @@
 ## X-Curse-Project-ID: 103213
 ## X-credits: slaren
 
+## IconTexture: Interface\AddOns\Plexus\Media\icon
+
 #@version-classic@
 Libs\LibClassicDurations\LibClassicDurations.xml
 #@end-version-classic@
