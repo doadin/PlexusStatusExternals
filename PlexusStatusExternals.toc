@@ -1,8 +1,8 @@
-## Interface: 100000
-## Interface-Retail: 100000
+## Interface: 100100
+## Interface-Retail: 100100
 ## Interface-Classic: 11403
 ## Interface-BCC: 20504
-## Interface-Wrath: 30400
+## Interface-Wrath: 30401
 ## Version: @project-version@
 ## Title: PlexusStatusExternals
 ## Notes: Adds a status to Plexus for Raid/Personal CDs.
@@ -10,6 +10,8 @@
 ## Dependencies: Plexus
 ## X-Curse-Project-ID: 103213
 ## X-credits: slaren
+
+## IconTexture: Interface\AddOns\Plexus\Media\icon
 
 #@version-classic@
 Libs\LibClassicDurations\LibClassicDurations.xml
