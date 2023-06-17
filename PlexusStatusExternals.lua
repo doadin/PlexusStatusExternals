@@ -43,6 +43,7 @@ tankingbuffs = {
     },
     ["DRUID"] = {
         22812,  -- Barkskin
+        102351, -- Cenarion Ward
         102342, -- Ironbark
         192081, -- Ironfur
         105737, -- Might of Ursoc (Mass Regeneration tier bonus)
@@ -250,6 +251,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             --77535, -- Blood Shield
             --61336,	-- Survival Instincts
             --22812,  -- Barkskin
+            --102351, -- Cenarion Ward
             --192081, -- Ironfur
             --102342, -- Ironbark
             --243435, -- Fortifying Brew
