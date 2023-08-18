@@ -55,6 +55,7 @@ tankingbuffs = {
         363534, -- Rewind
         363916, -- Obsidian Scale
         374348, -- Renewing Blaze
+        360827, -- Blistering Scales
     },
     ["HUNTER"] = {
         186265,  -- Aspect of the Turtle
@@ -271,6 +272,11 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
             --198589, -- Blur
             --97463,  -- Commanding Shout
             --740,    -- Tranquility
+            --357170, -- Time Dilation
+            --363534, -- Rewind
+            --363916, -- Obsidian Scale
+            --374348, -- Renewing Blaze
+            --360827, -- Blistering Scales
             --64843,  -- Divine Hymn
             --207399, -- Ancestral Protection Totem
             --98008,  -- Spirit Link Totem
