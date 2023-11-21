@@ -602,23 +602,11 @@ function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 
 
     local name, uicon, count, duration, expirationTime, caster, spellId
 
-    local LibClassicDurations
-    if IsClassicWow() then
-        LibClassicDurations = LibStub:GetLibrary("LibClassicDurations", true)
-    end
-    if LibClassicDurations then
-        LibClassicDurations:Register("Plexus")
-        UnitAura = LibClassicDurations.UnitAuraWrapper
-    end
-
     for i =1, 40 do
-        if (IsClassicWow() and LibClassicDurations) then
-            name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
-        end
         if IsRetailWow() or IsTBCWow() or IsWrathWow() then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitAura(unitid, i, "HELPFUL")
         end
-        if (IsClassicWow() and not LibClassicDurations) then
+        if IsClassicWow() then
             name, uicon, count, _, duration, expirationTime, caster, _, _, spellId = UnitBuff(unitid, i)
         end
         if not spellId then

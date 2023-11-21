@@ -1,8 +1,5 @@
 package-as: PlexusStatusExternals
 
-externals:
-   Libs/LibClassicDurations: https://repos.curseforge.com/wow/libclassicdurations
-
 ignore:
  - .pkgmeta
  - .gitignore

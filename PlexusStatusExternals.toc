@@ -13,9 +13,5 @@
 
 ## IconTexture: Interface\AddOns\Plexus\Media\icon
 
-#@version-classic@
-Libs\LibClassicDurations\LibClassicDurations.xml
-#@end-version-classic@
-
 SpellsWidget.lua
 PlexusStatusExternals.lua
