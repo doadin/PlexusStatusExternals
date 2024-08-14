@@ -218,7 +218,7 @@ PlexusStatusExternals.tankingbuffs = tankingbuffs --luacheck: ignore 112
 
 -- locals
 local PlexusRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
-local GetSpellInfo = GetSpellInfo
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
 local UnitBuff = UnitBuff
 local UnitGUID = UnitGUID
 local GetAuraDataByAuraInstanceID
@@ -392,7 +392,8 @@ function PlexusStatusExternals:OnInitialize() --luacheck: ignore 112
 
     for class, buffs in pairs(tankingbuffs) do --luacheck: ignore 213
         for _, spellid in pairs(buffs) do
-            local sname = GetSpellInfo(spellid)
+            local spellInfo = GetSpellInfo(spellid)
+            local sname = C_Spell and spellInfo.name or spellInfo
             if not sname then print(spellid, ": Bad spellid") end
             spellnames[spellid] = sname or tostring(spellid)
         end
