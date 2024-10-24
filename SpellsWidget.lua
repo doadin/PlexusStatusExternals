@@ -1,4 +1,5 @@
 local AceGUI = LibStub("AceGUI-3.0")
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo or GetSpellInfo
 
 do
     local widgetType = "PSE-SpellsConfig"
@@ -28,7 +29,14 @@ do
     end
 
     local function SetContainerSpell(self, i, spellid, class, active)
-        local sname, _, sicon = GetSpellInfo(spellid)
+        local spellInfo = GetSpellInfo(spellid)
+        local sname, _, sicon
+        if type(spellInfo) == "table" then
+            sname = spellInfo.name
+            sicon = spellInfo.iconID
+        else
+            sname, _, sicon = GetSpellInfo(spellid)
+        end
         if sicon == nil then
             sname = "bad spellid"
             sicon = "bad spellid"
