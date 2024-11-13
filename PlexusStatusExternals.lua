@@ -393,7 +393,7 @@ function PlexusStatusExternals:OnInitialize() --luacheck: ignore 112
     for class, buffs in pairs(tankingbuffs) do --luacheck: ignore 213
         for _, spellid in pairs(buffs) do
             local spellInfo = GetSpellInfo(spellid)
-            local sname = C_Spell and C_Spell.GetSpellInfo and spellInfo.name or spellInfo
+            local sname = spellInfo and spellInfo.name or nil
             if not sname then print(spellid, ": Bad spellid") end
             spellnames[spellid] = sname or tostring(spellid)
         end
