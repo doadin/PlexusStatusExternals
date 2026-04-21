@@ -15,5 +15,6 @@
 
 ## IconTexture: Interface\AddOns\Plexus\Media\icon
 
-SpellsWidget.lua
-PlexusStatusExternals.lua
+#SpellsWidget.lua
+#PlexusStatusExternals.lua
+remove.lua

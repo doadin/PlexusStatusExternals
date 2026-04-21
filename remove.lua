@@ -1,0 +1,1 @@
+print("PlexusStatusExternals is now integrated into Plexus, you can safly uninstall this plugin") --luacheck: ignore 112
